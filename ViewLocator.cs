@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using WinLimit.ViewModels;
+using WinLimit.Views;
 
 namespace WinLimit;
 
