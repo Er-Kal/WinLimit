@@ -7,6 +7,7 @@
     x:DataType="vm:HomeViewModel"
     x:Class="WinLimit.Views.HomeView">
     <StackPanel>
+        <TextBlock Text="Home Page" />
         <Border Padding="10" Background="LightBlue">
             <TextBlock
                 HorizontalAlignment="Center"

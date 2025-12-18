@@ -1,0 +1,44 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:WinLimit.ViewModels"
+    x:DataType="vm:BlockListViewModel"
+    x:Class="WinLimit.Views.BlockListView">
+    <StackPanel>
+        <TextBlock FontSize="24" Text="Block List" />
+        <Grid ColumnDefinitions="1*, 1*" >
+            <ListBox Grid.Column="0" Margin="10" ItemsSource="{Binding BlockItems}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+			            <Border Padding="4" Background="LightGray">
+                            <StackPanel Spacing="4">
+						        <TextBlock
+                                Text="{Binding Name}"
+                                FontWeight="Bold"
+                                FontSize="16"/>
+
+                                <TextBlock
+                                Text="{Binding Description}"
+                                FontSize="16"/>
+
+                                <TextBlock
+                                Text="{Binding TimeAdded, StringFormat='{}{0:d}'}"
+                                FontSize="16"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Column="1" Margin="10">
+				<TextBlock FontSize="20" Text="Suggested Apps"/>
+                <ItemsControl>
+					<ItemsControl.ItemsPanel>
+						
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</UserControl>

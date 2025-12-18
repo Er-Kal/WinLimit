@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
@@ -26,5 +25,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1">
       <OutputItemType>Analyzer</OutputItemType>
     </PackageReference>
+    <PackageReference Include="dotenv.net" Version="4.0.0" />
+    <PackageReference Include="Supabase" Version="1.1.1" />
   </ItemGroup>
 </Project>

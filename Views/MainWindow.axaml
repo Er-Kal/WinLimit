@@ -33,7 +33,7 @@
                     Height="48"
                     Source="avares://WinLimit/Assets/home.png" />
             </Button>
-            <Button>
+            <Button Command="{Binding ShowBlockListCommand}">
                 <Image
                     Width="48"
                     Height="48"

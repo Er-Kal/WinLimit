@@ -12,11 +12,13 @@ public partial class MainWindowViewModel : ViewModelBase
     private ViewModelBase _currentPage = null!;
     private readonly HomeViewModel _homePage;
     private readonly SchedulePageViewModel _schedulePage;
+    private readonly BlockListViewModel _blockListPage;
 
     public MainWindowViewModel()
     {
         _homePage = new HomeViewModel();
         _schedulePage = new SchedulePageViewModel();
+        _blockListPage = new BlockListViewModel();
         CurrentPage=_homePage;
     }
 
@@ -29,5 +31,10 @@ public partial class MainWindowViewModel : ViewModelBase
     private void ShowSchedule()
     {
         CurrentPage=_schedulePage;
+    }
+    [RelayCommand]
+    private void ShowBlockList()
+    {
+        CurrentPage=_blockListPage;
     }
 }
