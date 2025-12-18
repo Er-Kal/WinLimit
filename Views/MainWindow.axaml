@@ -21,32 +21,48 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
     <DockPanel>
-        <StackPanel
-            Margin="20"
-            DockPanel.Dock="Left"
-            Orientation="Vertical">
-            <!--  This is for the main content  -->
-            <Label FontSize="24">WinLimit</Label>
-            <Button Command="{Binding ShowHomeCommand}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="54"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>  
+            </Grid.RowDefinitions>
+            <Image
+                Margin="16,16,16,4"
+                Height="56"
+                Source="avares://WinLimit/Assets/logo.png"
+                />
+            <StackPanel Grid.Row="1"
+                Margin="20"
+                DockPanel.Dock="Left"
+                Orientation="Vertical">
+                <!--  This is for the main content  -->
+                <Button Command="{Binding ShowHomeCommand}">
+                    <Image
+                        Width="48"
+                        Height="48"
+                        Source="avares://WinLimit/Assets/home.png" />
+                </Button>
+                <Button Command="{Binding ShowBlockListCommand}">
+                    <Image
+                        Width="48"
+                        Height="48"
+                        Source="avares://WinLimit/Assets/block.png" />
+                </Button>
+                <Button Command="{Binding ShowScheduleCommand}">
+                    <Image
+                        Width="48"
+                        Height="48"
+                        Source="avares://WinLimit/Assets/calendar.png" />
+                </Button>
+            </StackPanel>
+            <Button Grid.Row="2" Margin="20">
                 <Image
                     Width="48"
                     Height="48"
-                    Source="avares://WinLimit/Assets/home.png" />
+                    Source="avares://WinLimit/Assets/user.png" />
             </Button>
-            <Button Command="{Binding ShowBlockListCommand}">
-                <Image
-                    Width="48"
-                    Height="48"
-                    Source="avares://WinLimit/Assets/block.png" />
-            </Button>
-            <Button Command="{Binding ShowScheduleCommand}">
-                <Image
-                    Width="48"
-                    Height="48"
-                    Source="avares://WinLimit/Assets/calendar.png" />
-            </Button>
-        </StackPanel>
-        
+        </Grid>
         <!-- Content Control, Shows the actual pages here: -->
         <ContentControl Name="PageContent" Padding="20" Content="{Binding CurrentPage}"/>
     </DockPanel>

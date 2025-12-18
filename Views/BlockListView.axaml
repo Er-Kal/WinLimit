@@ -33,10 +33,22 @@
             </ListBox>
             <StackPanel Grid.Column="1" Margin="10">
 				<TextBlock FontSize="20" Text="Suggested Apps"/>
-                <ItemsControl>
-					<ItemsControl.ItemsPanel>
-						
+                <ItemsControl ItemsSource="{Binding RecommendedApps}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+                            <Button
+                            Content="{Binding Label}"
+                            Command="{Binding Command}"
+                            Margin="4,2,4,2"
+                            HorizontalAlignment="Left"
+                            />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
         </Grid>

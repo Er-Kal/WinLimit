@@ -4,7 +4,7 @@ using Supabase.Postgrest.Models;
 namespace WinLimit.Models;
 
 [Table("users")]
-public class User : BaseModel
+public class Users : BaseModel
 {
     [PrimaryKey("userid")]
     public string ?uuid {get; set;}

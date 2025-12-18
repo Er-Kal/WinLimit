@@ -1,0 +1,10 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="WinLimit.PopUpWindow"
+    Title="App Blocked" Width="300" Height="150"
+    WindowStartupLocation="CenterScreen">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Name="Message" Text="Pop Up Window"/>
+    </StackPanel>
+</Window>

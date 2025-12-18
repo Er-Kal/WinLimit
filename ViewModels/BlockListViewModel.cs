@@ -14,13 +14,15 @@ public partial class BlockListViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<BlockItem> _blockItems;
     [ObservableProperty]
-    private ObservableCollection<Button> _recommendedApps;
-    public BlockListViewModel()
+    private ObservableCollection<RecommendedAppBlock> _recommendedApps;
+
+    private readonly SupabaseService _supabase;
+    public BlockListViewModel(SupabaseService supabaseService)
     {
         // Initialize collections immediately to avoid NullReferenceExceptions in the View
         BlockItems = new ObservableCollection<BlockItem>();
-        RecommendedApps = new ObservableCollection<Button>();
-
+        RecommendedApps = new ObservableCollection<RecommendedAppBlock>();
+        _supabase = supabaseService;
         // Call the async method without awaiting it
         _ = InitializeAsync();
     }
@@ -29,18 +31,25 @@ public partial class BlockListViewModel : ViewModelBase
     {
         try 
         {
-            SupabaseService supabase = new SupabaseService();
-            
             // This await works here because we are in a method, not a constructor
-            string name = await supabase.getSupabaseURL(); 
+            string name = await _supabase.getFirstUserEmail(); 
 
             // Update the collection on the UI thread (usually automatic in MVVM, but safe to do here)
             BlockItems.Add(new BlockItem(name, "This is a game"));
             BlockItems.Add(new BlockItem("App2.exe", "This is social media"));
             BlockItems.Add(new BlockItem("App3.exe", "This is time waster"));
 
-            RecommendedApps.Add(new Button{Content="Steam"});
-            RecommendedApps.Add(new Button{Content="Roblox"});
+            RecommendedApps.Add(new RecommendedAppBlock("Steam",null));
+            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
+            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
+            RecommendedApps.Add(new RecommendedAppBlock("asdfasdfasdfasdf",null));
+            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
+            RecommendedApps.Add(new RecommendedAppBlock("asdfadsfasdf",null));
+            RecommendedApps.Add(new RecommendedAppBlock("asdfasdf",null));
+            RecommendedApps.Add(new RecommendedAppBlock("asdf",null));
+            RecommendedApps.Add(new RecommendedAppBlock("adsf",null));
+            RecommendedApps.Add(new RecommendedAppBlock("asdfasdfsafsadfdsad",null));
+            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
         }
         catch (Exception ex)
         {

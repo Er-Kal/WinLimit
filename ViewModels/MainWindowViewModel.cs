@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WinLimit.Services;
 using WinLimit.Views;
 
 namespace WinLimit.ViewModels;
@@ -14,11 +15,11 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly SchedulePageViewModel _schedulePage;
     private readonly BlockListViewModel _blockListPage;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(SupabaseService supabaseService)
     {
         _homePage = new HomeViewModel();
         _schedulePage = new SchedulePageViewModel();
-        _blockListPage = new BlockListViewModel();
+        _blockListPage = new BlockListViewModel(supabaseService);
         CurrentPage=_homePage;
     }
 
