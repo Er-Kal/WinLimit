@@ -52,7 +52,7 @@ public class SupabaseService
         return "No Users";
     }
     // Sign up function
-    public async Task<Session> SignUp(string email, string password)
+    public async Task<Session?> SignUp(string email, string password)
     {
         try
         {
@@ -61,14 +61,15 @@ public class SupabaseService
 
             Session session = await Client.Auth.SignUp(email, password);
 
-            if (session.User != null)
+            if (session?.User != null)
                 return session;
 
             throw new Exception("User failed to create");
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            throw new Exception("User failed to create");
+            Console.WriteLine(e.Message);
+            return null;
         }
     }
 }

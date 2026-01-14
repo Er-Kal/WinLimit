@@ -25,17 +25,22 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="54"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>  
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> 
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <Image
                 Margin="16,16,16,4"
                 Height="56"
                 Source="avares://WinLimit/Assets/logo.png"
                 />
             <StackPanel Grid.Row="1"
-                Margin="20"
-                DockPanel.Dock="Left"
-                Orientation="Vertical">
+                Grid.Column="0"
+                Orientation="Vertical"
+                HorizontalAlignment="Center">
                 <!--  This is for the main content  -->
                 <Button Command="{Binding ShowHomeCommand}">
                     <Image
@@ -55,8 +60,22 @@
                         Height="48"
                         Source="avares://WinLimit/Assets/calendar.png" />
                 </Button>
+                <Button Command="{Binding PopUpTestCommand}" Content="Test"/>
             </StackPanel>
-            <Button Grid.Row="2" Margin="20">
+            <Image Grid.Row="2" 
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Width="48"
+                    Height="48"
+                    Source="{Binding CurrentIcon}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+            <Button Grid.Row="3" 
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="20"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ShowLoginPageCommand}">
                 <Image
                     Width="48"
                     Height="48"

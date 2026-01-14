@@ -1,0 +1,21 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:WinLimit.ViewModels"
+    x:DataType="vm:LoginPageViewModel"
+    x:Class="WinLimit.Views.LoginPageView">
+    <StackPanel>
+        
+        <TextBlock FontSize="24" Text="Account Page" />
+        <TextBlock FontSize="16" Text="Username"/>
+        <TextBox Watermark="Enter Your Username" Text="{Binding Username}"/>
+        <TextBlock FontSize="16" Text="Password"/>
+        <TextBox Watermark="Enter Your Password" Text="{Binding Password}"/>
+        <TextBlock FontSize="16" Text="{Binding JwtToken}"/>
+        <Button Content="Login" Command="{Binding RegisterCommand}"/>
+        <Button Content="Register" Command="{Binding LoginCommand}"/>
+    </StackPanel>
+
+</UserControl>

@@ -28,6 +28,9 @@ public partial class App : Application
         // Create the database service
         collection.AddSingleton<SupabaseService>();
 
+        // Create App Blocker service
+        collection.AddSingleton<AppBlockerService>();
+
         // Register View Models that use Singletons
         collection.AddTransient<MainWindowViewModel>();
 

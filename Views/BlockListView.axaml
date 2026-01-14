@@ -1,56 +1,72 @@
 <UserControl
+    x:Class="WinLimit.Views.BlockListView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:WinLimit.ViewModels"
-    x:DataType="vm:BlockListViewModel"
-    x:Class="WinLimit.Views.BlockListView">
-    <StackPanel>
-        <TextBlock FontSize="24" Text="Block List" />
-        <Grid ColumnDefinitions="1*, 1*" >
-            <ListBox Grid.Column="0" Margin="10" ItemsSource="{Binding BlockItems}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-			            <Border Padding="4" Background="LightGray">
-                            <StackPanel Spacing="4">
-						        <TextBlock
-                                Text="{Binding Name}"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    x:DataType="vm:BlockListViewModel">
+    <Grid ColumnDefinitions="1*, 1*">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            FontSize="24"
+            Text="Block List" />
+        <ListBox
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="5"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding BlockedItems}"
+            SelectedItem="{Binding SelectedBlockedItem}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="4" Background="#dfdfdf">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="16"
                                 FontWeight="Bold"
-                                FontSize="16"/>
-
-                                <TextBlock
-                                Text="{Binding Description}"
-                                FontSize="16"/>
-
-                                <TextBlock
-                                Text="{Binding TimeAdded, StringFormat='{}{0:d}'}"
-                                FontSize="16"/>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <StackPanel Grid.Column="1" Margin="10">
-				<TextBlock FontSize="20" Text="Suggested Apps"/>
-                <ItemsControl ItemsSource="{Binding RecommendedApps}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-                            <Button
-                            Content="{Binding Label}"
-                            Command="{Binding Command}"
+                                Text="{Binding FriendlyName}" />
+                            <TextBlock FontSize="10" Foreground="#808080" Text="{Binding ExecutableName, StringFormat='{}{0}.exe'}"/>
+                            <TextBlock FontSize="16" Text="{Binding TimeAdded, StringFormat='{}{0:d}'}" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button
+            Grid.Row="2"
+            Grid.Column="0"
+            Command="{Binding RemoveBlockedItemCommand}"
+            Content="Remove" />
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10">
+            <TextBlock FontSize="20" Text="Suggested Apps" />
+            <ItemsControl ItemsSource="{Binding RecommendedApps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
                             Margin="4,2,4,2"
                             HorizontalAlignment="Left"
-                            />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-        </Grid>
-    </StackPanel>
+                            Command="{Binding $parent[ItemsControl].((vm:BlockListViewModel)DataContext).AddBlockedItemCommand}"
+                            CommandParameter="{Binding}"
+                            Content="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
 </UserControl>

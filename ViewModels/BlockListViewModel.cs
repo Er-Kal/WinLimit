@@ -1,6 +1,6 @@
 
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -12,19 +12,34 @@ namespace WinLimit.ViewModels;
 public partial class BlockListViewModel : ViewModelBase
 {
     [ObservableProperty]
-    private ObservableCollection<BlockItem> _blockItems;
+    private ObservableCollection<BlockItem> _blockedItems;
     [ObservableProperty]
-    private ObservableCollection<RecommendedAppBlock> _recommendedApps;
-
+    private ObservableCollection<string> _recommendedApps;
+    private AppBlockerService _appBlockerService;
     private readonly SupabaseService _supabase;
-    public BlockListViewModel(SupabaseService supabaseService)
+    private BlockItem? SelectedBlockedItem {get;set;}
+    public BlockListViewModel(SupabaseService supabaseService, AppBlockerService appBlockerService)
     {
         // Initialize collections immediately to avoid NullReferenceExceptions in the View
-        BlockItems = new ObservableCollection<BlockItem>();
-        RecommendedApps = new ObservableCollection<RecommendedAppBlock>();
+        BlockedItems = new ObservableCollection<BlockItem>();
+        RecommendedApps = new ObservableCollection<string>();
         _supabase = supabaseService;
+        _appBlockerService = appBlockerService;
+
+        _appBlockerService.OnBlockedAppsChanged += OnBlockedAppsChanged;
+
+        OnBlockedAppsChanged();
+
         // Call the async method without awaiting it
         _ = InitializeAsync();
+    }
+    private void OnBlockedAppsChanged()
+    {
+        BlockedItems.Clear();
+        foreach (BlockItem blockedApp in _appBlockerService.BlockedApps)
+        {
+            BlockedItems.Add(blockedApp);
+        }
     }
 
     private async Task InitializeAsync()
@@ -34,22 +49,17 @@ public partial class BlockListViewModel : ViewModelBase
             // This await works here because we are in a method, not a constructor
             string name = await _supabase.getFirstUserEmail(); 
 
-            // Update the collection on the UI thread (usually automatic in MVVM, but safe to do here)
-            BlockItems.Add(new BlockItem(name, "This is a game"));
-            BlockItems.Add(new BlockItem("App2.exe", "This is social media"));
-            BlockItems.Add(new BlockItem("App3.exe", "This is time waster"));
-
-            RecommendedApps.Add(new RecommendedAppBlock("Steam",null));
-            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
-            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
-            RecommendedApps.Add(new RecommendedAppBlock("asdfasdfasdfasdf",null));
-            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
-            RecommendedApps.Add(new RecommendedAppBlock("asdfadsfasdf",null));
-            RecommendedApps.Add(new RecommendedAppBlock("asdfasdf",null));
-            RecommendedApps.Add(new RecommendedAppBlock("asdf",null));
-            RecommendedApps.Add(new RecommendedAppBlock("adsf",null));
-            RecommendedApps.Add(new RecommendedAppBlock("asdfasdfsafsadfdsad",null));
-            RecommendedApps.Add(new RecommendedAppBlock("Roblox",null));
+            RecommendedApps.Add("Steam");
+            RecommendedApps.Add("Roblox");
+            RecommendedApps.Add("Roblox");
+            RecommendedApps.Add("asdfasdfasdfasdf");
+            RecommendedApps.Add("Roblox");
+            RecommendedApps.Add("asdfadsfasdf");
+            RecommendedApps.Add("asdfasdf");
+            RecommendedApps.Add("asdf");
+            RecommendedApps.Add("adsf");
+            RecommendedApps.Add("asdfasdfsafsadfdsad");
+            RecommendedApps.Add("Roblox");
         }
         catch (Exception ex)
         {
@@ -58,5 +68,18 @@ public partial class BlockListViewModel : ViewModelBase
             Console.WriteLine($"Initialization failed: {ex.Message}");
         }
     }
-    
+    [RelayCommand]
+    private void RemoveBlockedItem()
+    {
+        if (SelectedBlockedItem != null)
+        {
+            _appBlockerService.RemoveApp(SelectedBlockedItem);
+        }
+    }
+    [RelayCommand]
+    private void AddBlockedItem(string name)
+    {
+        _appBlockerService.AddApp(new BlockItem(name,name, ""));
+        RecommendedApps.Remove(name);
+    }
 }

@@ -10,24 +10,17 @@ namespace WinLimit.Models
 {
     public partial class BlockItem : ObservableObject
     {
-        [ObservableProperty]
-        private string _name;
+        public string FriendlyName {get; set;}
+        public string ExecutableName {get; set;}
+        public string? Description {get; set;}
+        public DateTime TimeAdded {get; set;}
 
-        [ObservableProperty]
-        private string _description;
-
-        [ObservableProperty]
-        private DateTime _timeAdded;
-
-        public BlockItem(string name, string description)
+        public BlockItem(string friendlyName, string executableName, string description)
         {
-            _name = name;
-            _description = description;
-            _timeAdded = DateTime.Now;
-
-            WrapPanel panel = new WrapPanel();
-
-            panel.Children.Add(new Button { Content = "Hahaha" });
+            FriendlyName=friendlyName;
+            ExecutableName=executableName;
+            Description = description;
+            TimeAdded = DateTime.Now;
         }
     }
 }
