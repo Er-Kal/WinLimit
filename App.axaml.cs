@@ -30,6 +30,8 @@ public partial class App : Application
         // Create App Blocker service
         collection.AddSingleton<AppBlockerService>();
 
+        collection.AddSingleton<LocalStorageService>();
+
         // Register View Models that use Singletons
         collection.AddTransient<MainWindowViewModel>();
 

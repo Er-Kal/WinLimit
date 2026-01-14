@@ -63,7 +63,7 @@
                             HorizontalAlignment="Left"
                             Command="{Binding $parent[ItemsControl].((vm:BlockListViewModel)DataContext).AddBlockedItemCommand}"
                             CommandParameter="{Binding}"
-                            Content="{Binding}" />
+                            Content="{Binding FriendlyName}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

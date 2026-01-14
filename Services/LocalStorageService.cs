@@ -32,8 +32,7 @@ public class LocalStorageService
 
         File.WriteAllBytes(_tokenFile,encryptedJwtData);
     }
-
-    public string? LoadToken(string jwt)
+    public string? LoadToken()
     {
         if (!File.Exists(_tokenFile))
         {

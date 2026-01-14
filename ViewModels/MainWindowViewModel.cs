@@ -15,19 +15,21 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly SchedulePageViewModel _schedulePage;
     private readonly BlockListViewModel _blockListPage;
     private readonly AppBlockerService _appBlockerService;
+    private readonly LocalStorageService _localStorageService;
     private readonly LoginPageViewModel _loginPage;
     private readonly Bitmap _shieldOn = new Bitmap(AssetLoader.Open(new System.Uri("avares://WinLimit/Assets/onindicator.png")));
     private readonly Bitmap _shieldOff = new Bitmap(AssetLoader.Open(new System.Uri("avares://WinLimit/Assets/offindicator.png")));
     [ObservableProperty]
     private Bitmap? _currentIcon;
 
-    public MainWindowViewModel(AppBlockerService appBlockerService)
+    public MainWindowViewModel(AppBlockerService appBlockerService, LocalStorageService localStorageService)
     {
         _appBlockerService = appBlockerService;
+        _localStorageService = localStorageService;
         _homePage = new HomeViewModel();
         _schedulePage = new SchedulePageViewModel();
         _blockListPage = new BlockListViewModel(appBlockerService);
-        _loginPage= new LoginPageViewModel();
+        _loginPage= new LoginPageViewModel(_localStorageService);
         CurrentPage=_homePage;
         appBlockerService.OnAppBlocked += OnAppBlocked;
         appBlockerService.OnTrackingChanged += OnTrackingChanged;

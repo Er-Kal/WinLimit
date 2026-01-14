@@ -14,10 +14,11 @@ public partial class LoginPageViewModel : ViewModelBase
     [ObservableProperty]
     private string _password = "";
     [ObservableProperty]
-    private string _jwtToken = "";
-    public LoginPageViewModel()
+    private string? _jwtToken = "";
+    public LoginPageViewModel(LocalStorageService localStorageService)
     {
-        _authService = new AuthService();
+        _authService = new AuthService(localStorageService);
+        _jwtToken=localStorageService.LoadToken();
     }
     [RelayCommand]
     public async Task Register()

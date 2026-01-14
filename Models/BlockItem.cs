@@ -22,5 +22,12 @@ namespace WinLimit.Models
             Description = description;
             TimeAdded = DateTime.Now;
         }
+        public BlockItem(string executableName, string description)
+        {
+            FriendlyName=executableName;
+            ExecutableName=executableName;
+            Description = description;
+            TimeAdded = DateTime.Now;
+        }
     }
 }
