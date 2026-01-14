@@ -12,9 +12,9 @@ public class AppBlockerService
 {
     private bool tracking = false;
     private List<BlockItem> blockedApps;
-    public event Action<string> OnAppBlocked;
-    public event Action<bool> OnTrackingChanged;
-    public event Action OnBlockedAppsChanged;
+    public event Action<string>? OnAppBlocked;
+    public event Action<bool>? OnTrackingChanged;
+    public event Action? OnBlockedAppsChanged;
     public IReadOnlyList<BlockItem> BlockedApps => blockedApps.AsReadOnly();
     // Constructor
     public AppBlockerService()

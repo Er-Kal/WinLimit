@@ -6,16 +6,14 @@
     xmlns:vm="using:WinLimit.ViewModels"
     x:DataType="vm:LoginPageViewModel"
     x:Class="WinLimit.Views.LoginPageView">
-    <StackPanel>
-        
+    <StackPanel HorizontalAlignment="Center">
         <TextBlock FontSize="24" Text="Account Page" />
         <TextBlock FontSize="16" Text="Username"/>
-        <TextBox Watermark="Enter Your Username" Text="{Binding Username}"/>
+        <TextBox Watermark="Enter Your Username" Text="{Binding Username}" Width="250"/>
         <TextBlock FontSize="16" Text="Password"/>
         <TextBox Watermark="Enter Your Password" Text="{Binding Password}"/>
         <TextBlock FontSize="16" Text="{Binding JwtToken}"/>
-        <Button Content="Login" Command="{Binding RegisterCommand}"/>
-        <Button Content="Register" Command="{Binding LoginCommand}"/>
+        <Button Margin="4,0,4,0" Content="Login" Command="{Binding RegisterCommand}" HorizontalAlignment="Center"/>
+        <Button Content="Register" Command="{Binding LoginCommand}" HorizontalAlignment="Center"/>
     </StackPanel>
-
 </UserControl>

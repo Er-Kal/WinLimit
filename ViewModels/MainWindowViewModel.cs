@@ -21,12 +21,12 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private Bitmap? _currentIcon;
 
-    public MainWindowViewModel(SupabaseService supabaseService, AppBlockerService appBlockerService)
+    public MainWindowViewModel(AppBlockerService appBlockerService)
     {
         _appBlockerService = appBlockerService;
         _homePage = new HomeViewModel();
         _schedulePage = new SchedulePageViewModel();
-        _blockListPage = new BlockListViewModel(supabaseService, appBlockerService);
+        _blockListPage = new BlockListViewModel(appBlockerService);
         _loginPage= new LoginPageViewModel();
         CurrentPage=_homePage;
         appBlockerService.OnAppBlocked += OnAppBlocked;

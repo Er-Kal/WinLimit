@@ -26,7 +26,6 @@ public partial class App : Application
         var collection = new ServiceCollection();
 
         // Create the database service
-        collection.AddSingleton<SupabaseService>();
 
         // Create App Blocker service
         collection.AddSingleton<AppBlockerService>();
@@ -36,10 +35,6 @@ public partial class App : Application
 
         // Build DI provider
         Services = collection.BuildServiceProvider();
-
-        var supabase = Services.GetRequiredService<SupabaseService>();
-        _ = supabase.InitializeAsync();
-
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

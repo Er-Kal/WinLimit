@@ -15,6 +15,7 @@
 }*/
 
 using System;
+using System.IO.Pipelines;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -24,10 +25,12 @@ namespace WinLimit.Services;
 public class AuthService
 {
     private readonly HttpClient _httpClient;
+    private readonly LocalStorageService _localStorageService;
     public AuthService()
     {
         _httpClient = new HttpClient();
         _httpClient.BaseAddress = new Uri("http://localhost:5226/");
+        _localStorageService = new LocalStorageService();
     }
     
     public async Task<string?> LoginAsync(string email, string password)
@@ -51,7 +54,10 @@ public class AuthService
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
-            return result?.Token;
+            string? token = result?.Token;
+            if (token!=null)
+                _localStorageService.SaveToken(token);
+            return token;
         }
 
         return response.ToString();

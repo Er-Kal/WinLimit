@@ -10,9 +10,9 @@ public partial class LoginPageViewModel : ViewModelBase
 {
     AuthService _authService;
     [ObservableProperty]
-    private string _email="";
+    private string _username = "";
     [ObservableProperty]
-    private string _password="";
+    private string _password = "";
     [ObservableProperty]
     private string _jwtToken = "";
     public LoginPageViewModel()
@@ -24,15 +24,32 @@ public partial class LoginPageViewModel : ViewModelBase
     {
         try
         {
-            string? response = await _authService.RegisterAsync(_email,_password);
-            if (response!=null)
-                JwtToken=response;
+            string? response = await _authService.RegisterAsync(Username, Password);
+            if (response != null)
+                JwtToken = response;
             else
-                JwtToken="There was a problem";
+                JwtToken = "There was a problem";
         }
         catch (Exception ex)
         {
-            JwtToken=$"Error: {ex.Message}";
+            JwtToken = $"Error: {ex.Message}";
+        }
+    }
+    [RelayCommand]
+    public async Task Login()
+    {
+        try
+        {
+            string? response = await _authService.LoginAsync(Username, Password);
+            if (response != null)
+            {
+                JwtToken = response;
+            }
+            JwtToken = "There was a problem";
+        }
+        catch
+        {
+            JwtToken = "There was a problem";
         }
     }
 }

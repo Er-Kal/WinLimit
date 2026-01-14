@@ -28,7 +28,7 @@ public class LocalStorageService
     public void SaveToken(string jwt)
     {
         byte[] jwtData = Encoding.UTF8.GetBytes(jwt);
-        byte[] encryptedJwtData = ProtectedData.Protect(jwtBytes,null,DataProtectionScope.CurrentUser);
+        byte[] encryptedJwtData = ProtectedData.Protect(jwtData,null,DataProtectionScope.CurrentUser);
 
         File.WriteAllBytes(_tokenFile,encryptedJwtData);
     }
