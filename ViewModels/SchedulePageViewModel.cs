@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using WinLimit.Models;
 
 namespace WinLimit.ViewModels;
@@ -27,5 +28,13 @@ public partial class SchedulePageViewModel : ViewModelBase
     private int getY(int y)
     {
         return y*25;
+    }
+
+    [RelayCommand]
+    private void AddRule()
+    {
+        ScheduleRuleWindow window = new ScheduleRuleWindow();
+        window.DataContext = new ScheduleRuleWindowViewModel(_scheduleService, window);
+        window.Show();
     }
 }

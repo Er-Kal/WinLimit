@@ -1,0 +1,44 @@
+<Window
+    x:Class="WinLimit.ScheduleRuleWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="using:RangeSlider.Avalonia.Controls"
+    xmlns:views="using:WinLimit.Views"
+    xmlns:vm="using:WinLimit.ViewModels"
+    Title="App Blocked"
+    Width="250"
+    Height="400"
+    x:DataType="vm:ScheduleRuleWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    WindowStartupLocation="CenterScreen">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock
+            Margin="0,0,15,0"
+            HorizontalAlignment="Center"
+            FontSize="24"
+            Text="Add a rule" />
+        <TextBlock HorizontalAlignment="Center" Text="Select a day" />
+        <ComboBox
+            Width="125"
+            HorizontalAlignment="Center"
+            SelectedIndex="0"
+            SelectedItem="{Binding SelectedDay}"
+            ItemsSource="{Binding DaysOfWeek}"/>
+        <rs:RangeSlider
+            Width="150"
+            HorizontalAlignment="Center"
+            LowerSelectedValue="{Binding LowerValue}"
+            Maximum="24"
+            Minimum="0"
+            UpperSelectedValue="{Binding UpperValue}" />
+        <TextBlock HorizontalAlignment="Center" Text="Selected timeframe" />
+        <TextBlock HorizontalAlignment="Center" Text="{Binding TimeString}" />
+        <TextBlock HorizontalAlignment="Center" Text="{Binding ErrorMessage}" />
+        <Button
+            HorizontalAlignment="Center"
+            Command="{Binding SubmitRuleCommand}"
+            Content="Submit" />
+    </StackPanel>
+</Window>

@@ -11,6 +11,7 @@
     VerticalContentAlignment="Stretch">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ItemsControl Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding WeekDays}">
@@ -23,10 +24,10 @@
                 <DataTemplate>
                     <Grid Height="600" HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="30" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <TextBlock FontSize="24" Text="{Binding Key}" />
+                        <TextBlock Grid.Row="0" FontSize="24" Text="{Binding Key}"/>
                         <ItemsControl
                             Grid.Row="1"
                             Padding="4"
@@ -54,5 +55,9 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Spacing="4">
+            <Button Command="{Binding AddRuleCommand}" Content="Add A Rule"/>
+            <TextBlock VerticalAlignment="Center" Text="To remove a rule, click on the block above"/>
+        </StackPanel>
     </Grid>
 </UserControl>
