@@ -2,8 +2,8 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Avalonia.Threading;
 using WinLimit.Services;
-using WinLimit.Views;
 
 namespace WinLimit.ViewModels;
 
@@ -27,13 +27,13 @@ public partial class MainWindowViewModel : ViewModelBase
         _appBlockerService = appBlockerService;
         _localStorageService = localStorageService;
         _homePage = new HomeViewModel();
-        _schedulePage = new SchedulePageViewModel();
-        _blockListPage = new BlockListViewModel(appBlockerService);
-        _loginPage= new LoginPageViewModel(_localStorageService);
-        CurrentPage=_homePage;
+        _schedulePage = new SchedulePageViewModel(_appBlockerService.scheduleService);
+        _blockListPage = new BlockListViewModel(_appBlockerService);
+        _loginPage = new LoginPageViewModel(_localStorageService);
+        CurrentPage = _homePage;
         appBlockerService.OnAppBlocked += OnAppBlocked;
         appBlockerService.OnTrackingChanged += OnTrackingChanged;
-        CurrentIcon=_shieldOn;
+        OnTrackingChanged(_appBlockerService.scheduleService.IsScheduledBlocked());
     }
 
     [RelayCommand]
@@ -44,17 +44,17 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void ShowSchedule()
     {
-        CurrentPage=_schedulePage;
+        CurrentPage = _schedulePage;
     }
     [RelayCommand]
     private void ShowBlockList()
     {
-        CurrentPage=_blockListPage;
+        CurrentPage = _blockListPage;
     }
     [RelayCommand]
     private void ShowLoginPage()
     {
-        CurrentPage=_loginPage;
+        CurrentPage = _loginPage;
     }
     [RelayCommand]
     private void PopUpTest()
@@ -73,11 +73,11 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (state)
         {
-            CurrentIcon=_shieldOn;
+            CurrentIcon = _shieldOn;
         }
         else
         {
-            CurrentIcon=_shieldOff;
+            CurrentIcon = _shieldOff;
         }
     }
 }

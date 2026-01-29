@@ -16,12 +16,24 @@ public class AppBlockerService
     public event Action<bool>? OnTrackingChanged;
     public event Action? OnBlockedAppsChanged;
     public IReadOnlyList<BlockItem> BlockedApps => blockedApps.AsReadOnly();
+    public ScheduleService scheduleService;
     // Constructor
     public AppBlockerService()
     {
+        scheduleService = new ScheduleService();
         blockedApps = new List<BlockItem>();
-        AddApp(new BlockItem("NotePad","notepad", ""));
+        AddApp(new BlockItem("NotePad", "notepad", ""));
+        scheduleService.OnSchedulesChanged += OnSchedulesChanged;
         StartLoop();
+    }
+
+    private void OnSchedulesChanged()
+    {
+        // Restart loop if schedule becomes active and we're not already tracking
+        if (!tracking && scheduleService.IsScheduledBlocked())
+        {
+            StartLoop();
+        }
     }
     // AppBlocked triggers the OnAppBlocked Event
     public void AppBlocked()
@@ -71,6 +83,11 @@ public class AppBlockerService
         TrackingChanged();
         while (tracking)
         {
+            if (!scheduleService.IsScheduledBlocked())
+            {
+                StopLoop();
+                break;
+            }
             try
             {
                 CheckAndKill();
@@ -85,8 +102,11 @@ public class AppBlockerService
     // StopLoop stops the app killing loop, calls "TrackingChanged" function
     public void StopLoop()
     {
-        tracking = false;
-        TrackingChanged();
+        if (tracking) // Only update if state is actually changing
+        {
+            tracking = false;
+            TrackingChanged();
+        }
     }
     // Invokes "OnTrackingChanged", used for displaying state of loop
     public void TrackingChanged()

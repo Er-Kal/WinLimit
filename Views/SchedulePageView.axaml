@@ -1,13 +1,58 @@
 <UserControl
+    x:Class="WinLimit.Views.SchedulePageView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:WinLimit.ViewModels"
+    xmlns:m="using:WinLimit.Models"
     x:DataType="vm:SchedulePageViewModel"
-    x:Class="WinLimit.Views.SchedulePageView">
-    <StackPanel>
-        <TextBlock FontSize="24" Text="Schedule Page" />
-    </StackPanel>
-
+    VerticalAlignment="Stretch"
+    VerticalContentAlignment="Stretch">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ItemsControl Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding WeekDays}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="7" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="600" HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="24" Text="{Binding Key}" />
+                        <ItemsControl
+                            Grid.Row="1"
+                            Padding="4"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{Binding Value.ScheduleRules}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas Height="600"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button VerticalAlignment="Stretch" Content="{Binding StartHour, StringFormat='{}{0}:00'}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.Styles>
+                                <Style Selector="ContentPresenter" x:DataType="m:ScheduleRule">
+                                    <Setter Property="Canvas.Top" Value="{Binding CanvasTop}"/>
+                                    <Setter Property="Height" Value="{Binding CanvasHeight}"/>
+                                </Style>
+                            </ItemsControl.Styles>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
 </UserControl>

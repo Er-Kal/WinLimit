@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:WinLimit.Views"
     xmlns:vm="using:WinLimit.ViewModels"
+    xmlns:m="using:WinLimit.Models"
     x:DataType="vm:MainWindowViewModel"
     Title="WinLimit"
     d:DesignHeight="450"
@@ -20,7 +21,7 @@
         -->
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <DockPanel>
+    <DockPanel LastChildFill="True">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="54"/>
@@ -83,6 +84,6 @@
             </Button>
         </Grid>
         <!-- Content Control, Shows the actual pages here: -->
-        <ContentControl Name="PageContent" Padding="20" Content="{Binding CurrentPage}"/>
+        <ContentControl Name="PageContent" Padding="20" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" Content="{Binding CurrentPage}"/>
     </DockPanel>
 </Window>

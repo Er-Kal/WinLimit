@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Avalonia.Threading;
+using System;
 
 namespace WinLimit.ViewModels;
 
@@ -12,6 +13,8 @@ public partial class HomeViewModel : ViewModelBase
     [RelayCommand]
     private void IncrementClick()
     {
-        Count++;
+        
+        int currentHour = DateTime.Now.Hour;
+        Count = currentHour;
     }
 }
