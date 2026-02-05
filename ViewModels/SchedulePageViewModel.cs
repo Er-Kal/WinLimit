@@ -37,4 +37,9 @@ public partial class SchedulePageViewModel : ViewModelBase
         window.DataContext = new ScheduleRuleWindowViewModel(_scheduleService, window);
         window.Show();
     }
+    [RelayCommand]
+    private void RemoveScheduleRule(ScheduleRule rule)
+    {
+        _scheduleService.RemoveRule(rule);
+    }
 }

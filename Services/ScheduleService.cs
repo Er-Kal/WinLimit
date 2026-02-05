@@ -8,10 +8,10 @@ public partial class ScheduleService : ObservableObject
 {
     public Dictionary<string,WeekDay> WeekDays;
     public event Action? OnSchedulesChanged;
+    private string[] days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
     public ScheduleService()
     {
         WeekDays = new Dictionary<string, WeekDay>();
-        string[] days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
         foreach (string day in days)
         {
             WeekDays.Add(day,new WeekDay(day));
@@ -43,5 +43,16 @@ public partial class ScheduleService : ObservableObject
             }
             await Task.Delay(30000);
         }
+    }
+    public void RemoveRule(ScheduleRule rule)
+    {
+        foreach (string day in days)
+        {
+            if (WeekDays[day].ScheduleRules.Contains(rule))
+            {
+                WeekDays[day].ScheduleRules.Remove(rule);
+            }
+        }
+        SchedulesChanged();
     }
 }
