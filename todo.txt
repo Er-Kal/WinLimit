@@ -1,0 +1,9 @@
+Input sanitisation for adding apps
+Input sanitisation for login/signup
+Proper account handling
+Storage of statistics locally
+Storage of statistics on cloud
+Pop ups
+Override current block status
+Settings (sharing stats etc)
+Fix linter errors

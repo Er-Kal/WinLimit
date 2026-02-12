@@ -28,9 +28,11 @@ public partial class App : Application
         // Create the database service
 
         // Create App Blocker service
-        collection.AddSingleton<AppBlockerService>();
 
         collection.AddSingleton<LocalStorageService>();
+
+        collection.AddSingleton<AppBlockerService>();
+
 
         // Register View Models that use Singletons
         collection.AddTransient<MainWindowViewModel>();

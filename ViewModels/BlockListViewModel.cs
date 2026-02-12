@@ -18,6 +18,12 @@ public partial class BlockListViewModel : ViewModelBase
     private ObservableCollection<BlockItem> _recommendedApps;
     private AppBlockerService _appBlockerService;
     private BlockItem? SelectedBlockedItem { get; set; }
+    [ObservableProperty]
+    private string _friendlyCustomName = "";
+    [ObservableProperty]
+    private string _executableCustomName = "";
+    [ObservableProperty]
+    private string _customDescription = "";
     public BlockListViewModel(AppBlockerService appBlockerService)
     {
         // Initialize collections immediately to avoid NullReferenceExceptions in the View
@@ -58,5 +64,19 @@ public partial class BlockListViewModel : ViewModelBase
     {
         _appBlockerService.AddApp(app);
         RecommendedApps.Remove(app);
+    }
+    [RelayCommand]
+    private void AddCustomApp()
+    {
+        BlockItem app;
+        if (FriendlyCustomName.Length > 0)
+        {
+            app = new BlockItem(FriendlyCustomName,ExecutableCustomName,CustomDescription);
+        }
+        else
+        {
+            app = new BlockItem(ExecutableCustomName,CustomDescription);
+        }
+        _appBlockerService.AddApp(app);
     }
 }

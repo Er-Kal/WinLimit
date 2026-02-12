@@ -15,6 +15,8 @@ namespace WinLimit.Models
         public string? Description {get; set;}
         public DateTime TimeAdded {get; set;}
 
+        public BlockItem() { }
+
         public BlockItem(string friendlyName, string executableName, string description)
         {
             FriendlyName=friendlyName;

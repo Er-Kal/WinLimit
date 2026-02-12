@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using WinLimit.Models;
+using WinLimit.Services;
 public class LocalStorageService
 {
     private readonly string _folderPath;
-    private readonly string _rulesFile;
+    private readonly string _schedulesFile;
+    private readonly string _blockedAppsFile;
     private readonly string _tokenFile;
 
     // Constructor, gets app directory path
@@ -20,17 +24,25 @@ public class LocalStorageService
             Directory.CreateDirectory(_folderPath);
         }
 
-        _rulesFile = Path.Combine(_folderPath,"rules.json");
+        _schedulesFile = Path.Combine(_folderPath, "schedules.json");
+        _blockedAppsFile = Path.Combine(_folderPath, "blocked_apps.json");
         _tokenFile = Path.Combine(_folderPath,"session.dat");
     }
     // Encrypt the given JWT token
     // Uses the Window's machines currently logged in user's credentials to encrypt it
     public void SaveToken(string jwt)
     {
-        byte[] jwtData = Encoding.UTF8.GetBytes(jwt);
-        byte[] encryptedJwtData = ProtectedData.Protect(jwtData,null,DataProtectionScope.CurrentUser);
+        try
+        {    
+            byte[] jwtData = Encoding.UTF8.GetBytes(jwt);
+            byte[] encryptedJwtData = ProtectedData.Protect(jwtData,null,DataProtectionScope.CurrentUser);
 
-        File.WriteAllBytes(_tokenFile,encryptedJwtData);
+            File.WriteAllBytes(_tokenFile,encryptedJwtData);
+        }
+        catch
+        {
+            Console.WriteLine("Theres an error writing the save token");
+        }
     }
     public string? LoadToken()
     {
@@ -51,4 +63,59 @@ public class LocalStorageService
             return null;
         }
     }
+
+    public void SaveSchedules(Dictionary<string, List<ScheduleRule>> data)
+    {
+        try
+        {    
+            JsonSerializerOptions jsonOptions = new JsonSerializerOptions {WriteIndented = true};
+            string jsonString = JsonSerializer.Serialize(data, jsonOptions);
+            File.WriteAllText(_schedulesFile, jsonString);
+        }
+        catch
+        {
+            Console.WriteLine("Theres error");
+        }
+    }
+
+    public Dictionary<string, List<ScheduleRule>>? LoadSchedules()
+    {
+        try
+        {
+            string data = File.ReadAllText(_schedulesFile);
+            return JsonSerializer.Deserialize<Dictionary<string,List<ScheduleRule>>>(data);
+        }
+        catch (FileNotFoundException) // No file
+        {
+            return null;
+        }
+    }
+
+    public void SaveBlockedApps(List<BlockItem> data)
+    {
+        try
+        {
+            JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(data, jsonOptions);
+            File.WriteAllText(_blockedAppsFile, jsonString);
+        }
+        catch
+        {
+            Console.WriteLine("Theres error");
+        }
+    }
+
+    public List<BlockItem> LoadBlockedApps()
+    {
+        try
+        {
+            string data = File.ReadAllText(_blockedAppsFile);
+            return JsonSerializer.Deserialize<List<BlockItem>>(data);
+        }
+        catch (FileNotFoundException) // No file
+        {
+            return null;
+        }
+    }
+    
 }

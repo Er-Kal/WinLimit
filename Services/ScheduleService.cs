@@ -9,7 +9,8 @@ public partial class ScheduleService : ObservableObject
     public Dictionary<string,WeekDay> WeekDays;
     public event Action? OnSchedulesChanged;
     private string[] days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-    public ScheduleService()
+    private LocalStorageService _localStorageService;
+    public ScheduleService(LocalStorageService localStorageService)
     {
         WeekDays = new Dictionary<string, WeekDay>();
         foreach (string day in days)
@@ -17,10 +18,13 @@ public partial class ScheduleService : ObservableObject
             WeekDays.Add(day,new WeekDay(day));
         }
         StartTrackingSchedules();
+        _localStorageService=localStorageService;
+        LoadSchedules();
     }
     public void SchedulesChanged()
     {
         OnSchedulesChanged?.Invoke();
+        SaveSchedules();
     }
     public bool IsScheduledBlocked()
     {
@@ -53,6 +57,31 @@ public partial class ScheduleService : ObservableObject
                 WeekDays[day].ScheduleRules.Remove(rule);
             }
         }
+        SchedulesChanged();
+    }
+    // Function to prepare for conversion to JSON to write to file
+    public void SaveSchedules()
+    {
+        Dictionary<string, List<ScheduleRule>> dict = new Dictionary<string, List<ScheduleRule>>();
+        foreach (string day in days)
+        {
+            dict[day] = WeekDays[day].ToJSON();
+        }
+        _localStorageService.SaveSchedules(dict);
+    }
+    public void LoadSchedules()
+    {
+        Dictionary<string, List<ScheduleRule>>? schedules = _localStorageService.LoadSchedules();
+        if (schedules == null) return;
+        foreach (string day in days)
+        {
+            List<ScheduleRule> rules = schedules[day];
+            foreach (ScheduleRule rule in rules)
+            {
+                WeekDays[day].AddRule(rule.StartHour, rule.EndHour);
+            }
+        }
+
         SchedulesChanged();
     }
 }

@@ -7,7 +7,8 @@
     xmlns:vm="using:WinLimit.ViewModels"
     HorizontalAlignment="Stretch"
     VerticalAlignment="Stretch"
-    x:DataType="vm:BlockListViewModel">
+    x:DataType="vm:BlockListViewModel"
+    x:Name="BlockListPage">
     <Grid ColumnDefinitions="1*, 1*">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -61,12 +62,19 @@
                         <Button
                             Margin="4,2,4,2"
                             HorizontalAlignment="Left"
-                            Command="{Binding $parent[ItemsControl].((vm:BlockListViewModel)DataContext).AddBlockedItemCommand}"
+                            Command="{Binding #BlockListPage.DataContext.AddBlockedItemCommand}"
                             CommandParameter="{Binding}"
                             Content="{Binding FriendlyName}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" Spacing="4">
+            <TextBlock Text="Add an app" FontSize= "18"/>
+            <TextBox Text="{Binding FriendlyCustomName}" Watermark="Friendly Name (Optional)" Width="150" HorizontalAlignment="Left"/>
+            <TextBox Text="{Binding ExecutableCustomName}" Watermark="Executable Name" Width="150" HorizontalAlignment="Left"/>
+            <TextBox Text="{Binding CustomDescription}" Watermark="Description" Width="150" HorizontalAlignment="Left"/>
+            <Button Content="Add App To Block List" Command="{Binding AddCustomAppCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

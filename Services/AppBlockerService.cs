@@ -17,14 +17,16 @@ public class AppBlockerService
     public event Action? OnBlockedAppsChanged;
     public IReadOnlyList<BlockItem> BlockedApps => blockedApps.AsReadOnly();
     public ScheduleService scheduleService;
+    public LocalStorageService _localStorageService;
     // Constructor
-    public AppBlockerService()
+    public AppBlockerService(LocalStorageService localStorageService)
     {
-        scheduleService = new ScheduleService();
+        scheduleService = new ScheduleService(localStorageService);
         blockedApps = new List<BlockItem>();
-        AddApp(new BlockItem("NotePad", "notepad", ""));
         scheduleService.OnSchedulesChanged += OnSchedulesChanged;
         StartLoop();
+        _localStorageService = localStorageService;
+        this.LoadBlockedApps();
     }
 
     private void OnSchedulesChanged()
@@ -35,6 +37,12 @@ public class AppBlockerService
             StartLoop();
         }
     }
+    // Blocked Apps List Changed
+    public void BlockedAppsChanged()
+    {
+        OnBlockedAppsChanged?.Invoke(); 
+        SaveBlockedApps();
+    }
     // AppBlocked triggers the OnAppBlocked Event
     public void AppBlocked()
     {
@@ -44,13 +52,13 @@ public class AppBlockerService
     public void AddApp(BlockItem app)
     {
         blockedApps.Add(app);
-        OnBlockedAppsChanged?.Invoke();
+        BlockedAppsChanged();
     }
     // RemoveApp removes a "BlockItem" from the "blockedApps" list and triggers "OnBlockedAppsChanged" event
     public void RemoveApp(BlockItem app)
     {
         blockedApps.Remove(app);
-        OnBlockedAppsChanged?.Invoke();
+        BlockedAppsChanged();
     }
     // Loop logic to go through every process and kill it if any match with a blocked app
     // Will trigger "AppBlocked" event
@@ -112,5 +120,17 @@ public class AppBlockerService
     public void TrackingChanged()
     {
         OnTrackingChanged?.Invoke(tracking);
+    }
+
+    public void SaveBlockedApps()
+    {
+        _localStorageService.SaveBlockedApps(blockedApps);
+    }
+
+    public void LoadBlockedApps()
+    {
+        List<BlockItem>? data = _localStorageService.LoadBlockedApps();
+        if (data == null) return;
+        blockedApps = data;
     }
 }
