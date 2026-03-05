@@ -13,7 +13,7 @@
         <TextBlock FontSize="16" Text="Password"/>
         <TextBox Watermark="Enter Your Password" Text="{Binding Password}"/>
         <TextBlock FontSize="16" Text="{Binding JwtToken}"/>
-        <Button Margin="4,0,4,0" Content="Login" Command="{Binding RegisterCommand}" HorizontalAlignment="Center"/>
-        <Button Content="Register" Command="{Binding LoginCommand}" HorizontalAlignment="Center"/>
+        <Button Margin="4,0,4,0" Content="Login" Command="{Binding LoginCommand}" HorizontalAlignment="Center"/>
+        <Button Content="Register" Command="{Binding RegisterCommand}" HorizontalAlignment="Center"/>
     </StackPanel>
 </UserControl>

@@ -105,7 +105,7 @@ public class LocalStorageService
         }
     }
 
-    public List<BlockItem> LoadBlockedApps()
+    public List<BlockItem>? LoadBlockedApps()
     {
         try
         {

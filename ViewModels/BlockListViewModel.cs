@@ -24,13 +24,14 @@ public partial class BlockListViewModel : ViewModelBase
     private string _executableCustomName = "";
     [ObservableProperty]
     private string _customDescription = "";
-    public BlockListViewModel(AppBlockerService appBlockerService)
+    private APIService _apiService;
+    public BlockListViewModel(AppBlockerService appBlockerService, APIService apiService)
     {
         // Initialize collections immediately to avoid NullReferenceExceptions in the View
         BlockedItems = new ObservableCollection<BlockItem>();
         RecommendedApps = new ObservableCollection<BlockItem>();
         _appBlockerService = appBlockerService;
-
+        _apiService = apiService;
         _appBlockerService.OnBlockedAppsChanged += OnBlockedAppsChanged;
 
         OnBlockedAppsChanged();
@@ -45,11 +46,17 @@ public partial class BlockListViewModel : ViewModelBase
         }
     }
 
-    // Need to get rid of this func when hooked to backend
-    private void Initialize()
+    private async Task Initialize()
     {
-        RecommendedApps.Add(new BlockItem("Roblox","RobloxPlayerBeta","Roblox player"));
-        RecommendedApps.Add(new BlockItem("steam","Steam library app"));
+        var items = await _apiService.GetLatestBlockRecommendations();
+        if (items == null) return;
+        if (items.Count > 0)
+        {
+            foreach (var item in items)
+            {
+                RecommendedApps.Add(item);
+            }
+        }
     }
     [RelayCommand]
     private void RemoveBlockedItem()

@@ -9,10 +9,9 @@ public class AuthService
 {
     private readonly HttpClient _httpClient;
     private readonly LocalStorageService _localStorageService;
-    public AuthService(LocalStorageService localStorageService)
+    public AuthService(LocalStorageService localStorageService, APIService apiService)
     {
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("http://localhost:5226/");
+        _httpClient = apiService.ReturnHTTPClient();
         _localStorageService = localStorageService;
     }
     

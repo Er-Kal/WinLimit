@@ -15,9 +15,9 @@ public partial class LoginPageViewModel : ViewModelBase
     private string _password = "";
     [ObservableProperty]
     private string? _jwtToken = "";
-    public LoginPageViewModel(LocalStorageService localStorageService)
+    public LoginPageViewModel(LocalStorageService localStorageService, APIService apiService)
     {
-        _authService = new AuthService(localStorageService);
+        _authService = new AuthService(localStorageService, apiService);
         _jwtToken=localStorageService.LoadToken();
     }
     [RelayCommand]
@@ -45,12 +45,13 @@ public partial class LoginPageViewModel : ViewModelBase
             if (response != null)
             {
                 JwtToken = response;
+                return;
             }
             JwtToken = "There was a problem";
         }
-        catch
+        catch (Exception ex)
         {
-            JwtToken = "There was a problem";
+            JwtToken = ex.Message;
         }
     }
 }

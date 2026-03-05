@@ -2,6 +2,7 @@ using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
 namespace WinLimit.Models;
+// User Data Model
 
 [Table("users")]
 public class Users : BaseModel

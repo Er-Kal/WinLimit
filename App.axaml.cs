@@ -33,6 +33,7 @@ public partial class App : Application
 
         collection.AddSingleton<AppBlockerService>();
 
+        collection.AddSingleton<APIService>();
 
         // Register View Models that use Singletons
         collection.AddTransient<MainWindowViewModel>();

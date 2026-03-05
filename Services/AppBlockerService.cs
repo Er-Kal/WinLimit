@@ -69,7 +69,7 @@ public class AppBlockerService
         foreach (Process process in processes)
         {
             string processName = process.ProcessName.ToLower();
-            if (blockedApps.Any(b => b.ExecutableName.ToLower() == processName))
+            if (blockedApps.Any(b => b.ExecutableName?.ToLower() == processName))
             {
                 try
                 {
