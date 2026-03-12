@@ -1,5 +1,6 @@
 
 
+using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +23,7 @@ public class AppBlockerService
     public IReadOnlyList<BlockItem> BlockedApps => blockedApps.AsReadOnly();
     public ScheduleService scheduleService;
     public LocalStorageService _localStorageService;
-    private bool blockingOverride = false;
+    public bool BlockingOverride = false;
     // Constructor
     public AppBlockerService(LocalStorageService localStorageService, APIService apiService)
     {
@@ -52,7 +53,7 @@ public class AppBlockerService
     // AppBlocked triggers the OnAppBlocked Event
     public void AppBlocked()
     {
-        OnAppBlocked?.Invoke("An app has been blocked");
+        Dispatcher.UIThread.Post(() => OnAppBlocked?.Invoke("An app has been blocked"));
     }
     // AddApp adds a "BlockItem" to the "blockedApps" list and triggers "OnBlockedAppsChanged" event
     public void AddApp(BlockItem app)
@@ -99,7 +100,7 @@ public class AppBlockerService
         TrackingChanged();
         while (tracking)
         {
-            if (!scheduleService.IsScheduledBlocked() || blockingOverride)
+            if (!scheduleService.IsScheduledBlocked() || BlockingOverride)
             {
                 StopLoop();
                 break;
@@ -158,9 +159,6 @@ public class AppBlockerService
     {
         string? data = await _apiService.GetUserProfile();
         if (data == null) return;
-
-
-        System.Diagnostics.Debug.WriteLine(data);
         UserProfile? userProfile = JsonSerializer.Deserialize<UserProfile>(data);
         if (userProfile == null) return;
 
@@ -170,6 +168,6 @@ public class AppBlockerService
 
     public void ChangeOverrideState()
     {
-        blockingOverride = !blockingOverride;
+        BlockingOverride = !BlockingOverride;
     }
 }

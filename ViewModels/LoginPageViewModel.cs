@@ -89,4 +89,16 @@ public partial class LoginPageViewModel : ViewModelBase
         wind.DataContext = new LogoutPopUpWindowViewModel(wind, _appBlockerService);
         wind.Show();
     }
+    [RelayCommand]
+    public void Override()
+    {
+        if (!_appBlockerService.BlockingOverride)
+        {
+            _appBlockerService.AppBlocked();
+        }
+        else
+        {
+            _appBlockerService.ChangeOverrideState();
+        }
+    }
 }

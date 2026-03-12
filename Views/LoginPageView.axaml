@@ -22,5 +22,6 @@
             <TextBlock FontSize="16" Text="{Binding UserEmail}"/>
             <Button Content="Logout" Command="{Binding LogoutCommand}" HorizontalAlignment="Center"/>
         </StackPanel>
+        <Button Content="Override Toggle" HorizontalAlignment="Center" Command="{Binding OverrideCommand}"/>
     </StackPanel>
 </UserControl>

@@ -13,7 +13,10 @@
     Width="500"
     Icon="/Assets/avalonia-logo.ico">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <TextBlock Name="Message" Text="Pop Up Window"/>
-        <Button Command="{Binding StopLoopCommand}" Content="Stop Loop"/>
+        <TextBlock Text="If you would like to disable the blocking, type the extract displayed" Padding="0,0,5,0"/>
+        <TextBlock Text="{Binding TextExtract}" MaxWidth="450" TextWrapping="Wrap"/>
+        <TextBox Watermark="Re-Type the extract here" MaxWidth="450" Text="{Binding UserInput}" TextWrapping="Wrap"/>
+        <Button Command="{Binding StopLoopCommand}" Content="Attempt Override"/>
+        <TextBlock Name="Message" Text="{Binding ErrorMessage}"/>
     </StackPanel>
 </Window>

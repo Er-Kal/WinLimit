@@ -64,13 +64,13 @@ public partial class MainWindowViewModel : ViewModelBase
     private void PopUpTest()
     {
         PopUpWindow window = new PopUpWindow("Hello");
-        window.DataContext = new PopUpWindowViewModel(_appBlockerService);
+        window.DataContext = new PopUpWindowViewModel(_appBlockerService, window);
         window.Show();
     }
     private void OnAppBlocked(string message)
     {
         PopUpWindow window = new PopUpWindow("App has been blocked");
-        window.DataContext = new PopUpWindowViewModel(_appBlockerService);
+        window.DataContext = new PopUpWindowViewModel(_appBlockerService, window);
         window.Show();
     }
     private void OnTrackingChanged(bool state)

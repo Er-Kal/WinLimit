@@ -93,13 +93,13 @@ public partial class ScheduleService : ObservableObject
         if (schedules == null) return;
         foreach (string day in days)
         {
+            WeekDays[day].ScheduleRules.Clear();
             List<ScheduleRule> rules = schedules[day];
             foreach (ScheduleRule rule in rules)
             {
                 WeekDays[day].AddRule(rule.StartHour, rule.EndHour);
             }
         }
-
-        SchedulesChanged();
+        SaveSchedules();
     }
 }
