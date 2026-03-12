@@ -1,5 +1,6 @@
 
 
+using Avalonia.Controls;
 using Avalonia.Threading;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ public class AppBlockerService
     public LocalStorageService _localStorageService;
     public bool BlockingOverride = false;
     // Constructor
+    private Window popUpWindow;
     public AppBlockerService(LocalStorageService localStorageService, APIService apiService)
     {
         scheduleService = new ScheduleService(localStorageService, apiService);

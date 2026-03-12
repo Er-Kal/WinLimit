@@ -12,8 +12,8 @@ VerticalContentAlignment="Stretch"
 x:Name="SchedulePage">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ItemsControl Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding WeekDays}">
             <ItemsControl.ItemsPanel>
@@ -23,9 +23,9 @@ x:Name="SchedulePage">
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="600" HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="30" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" FontSize="24" Text="{Binding Key}"/>
@@ -37,7 +37,7 @@ x:Name="SchedulePage">
                         ItemsSource="{Binding Value.ScheduleRules}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <Canvas Height="600"/>
+                                    <Canvas ClipToBounds="True"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
@@ -58,7 +58,7 @@ x:Name="SchedulePage">
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Spacing="4">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Spacing="4" Margin="0,8,0,0">
             <Button Command="{Binding AddRuleCommand}" Content="Add A Rule"/>
             <TextBlock VerticalAlignment="Center" Text="To remove a rule, click on the block above"/>
         </StackPanel>

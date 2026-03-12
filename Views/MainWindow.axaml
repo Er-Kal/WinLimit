@@ -43,12 +43,12 @@
                 Orientation="Vertical"
                 HorizontalAlignment="Center">
                 <!--  This is for the main content  -->
-                <Button Command="{Binding ShowHomeCommand}">
+                <!-- <Button Command="{Binding ShowHomeCommand}">
                     <Image
                         Width="48"
                         Height="48"
-                        Source="avares://WinLimit/Assets/home.png" />
-                </Button>
+                        Source="avares://WinLimit/Assets/home.png" /> 
+                </Button> -->
                 <Button Command="{Binding ShowBlockListCommand}">
                     <Image
                         Width="48"
@@ -61,7 +61,6 @@
                         Height="48"
                         Source="avares://WinLimit/Assets/calendar.png" />
                 </Button>
-                <Button Command="{Binding PopUpTestCommand}" Content="Test"/>
             </StackPanel>
             <Image Grid.Row="2" 
                     Grid.Column="0"

@@ -19,6 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly APIService _apiService;
     private readonly AuthService _authService;
     private readonly LoginPageViewModel _loginPage;
+    private PopUpWindow _popUpWindow;
     private readonly Bitmap _shieldOn = new Bitmap(AssetLoader.Open(new System.Uri("avares://WinLimit/Assets/onindicator.png")));
     private readonly Bitmap _shieldOff = new Bitmap(AssetLoader.Open(new System.Uri("avares://WinLimit/Assets/offindicator.png")));
     [ObservableProperty]
@@ -34,7 +35,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _schedulePage = new SchedulePageViewModel(_appBlockerService.scheduleService);
         _blockListPage = new BlockListViewModel(_appBlockerService, _apiService);
         _loginPage = new LoginPageViewModel(_authService,_appBlockerService);
-        CurrentPage = _homePage;
+        CurrentPage = _blockListPage;
         appBlockerService.OnAppBlocked += OnAppBlocked;
         appBlockerService.OnTrackingChanged += OnTrackingChanged;
         OnTrackingChanged(_appBlockerService.scheduleService.IsScheduledBlocked());
@@ -61,17 +62,16 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentPage = _loginPage;
     }
     [RelayCommand]
-    private void PopUpTest()
-    {
-        PopUpWindow window = new PopUpWindow("Hello");
-        window.DataContext = new PopUpWindowViewModel(_appBlockerService, window);
-        window.Show();
-    }
     private void OnAppBlocked(string message)
     {
-        PopUpWindow window = new PopUpWindow("App has been blocked");
-        window.DataContext = new PopUpWindowViewModel(_appBlockerService, window);
-        window.Show();
+        if (_popUpWindow != null && _popUpWindow.IsVisible)
+        {
+            _popUpWindow.Activate();
+            return;
+        }
+        _popUpWindow = new PopUpWindow();
+        _popUpWindow.DataContext = new PopUpWindowViewModel(_appBlockerService, _popUpWindow);
+        _popUpWindow.Show();
     }
     private void OnTrackingChanged(bool state)
     {
