@@ -1,22 +1,21 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace WinLimit
+namespace WinLimit.Views;
+
+public partial class PopUpWindow : Window
 {
-    public partial class PopUpWindow : Window
+    public PopUpWindow()
     {
-        public PopUpWindow()
-        {
-            InitializeComponent();
-        }
-        public PopUpWindow(string message)
-        {
-            InitializeComponent();
-            this.FindControl<TextBlock>("Message")!.Text = message;
-        }
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        InitializeComponent();
+    }
+    public PopUpWindow(string message)
+    {
+        InitializeComponent();
+        this.FindControl<TextBlock>("Message")!.Text = message;
+    }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

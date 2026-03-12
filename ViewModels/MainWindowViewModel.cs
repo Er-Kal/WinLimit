@@ -2,7 +2,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Avalonia.Threading;
+using WinLimit.Views;
 using WinLimit.Services;
 
 namespace WinLimit.ViewModels;
@@ -17,6 +17,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly AppBlockerService _appBlockerService;
     private readonly LocalStorageService _localStorageService;
     private readonly APIService _apiService;
+    private readonly AuthService _authService;
     private readonly LoginPageViewModel _loginPage;
     private readonly Bitmap _shieldOn = new Bitmap(AssetLoader.Open(new System.Uri("avares://WinLimit/Assets/onindicator.png")));
     private readonly Bitmap _shieldOff = new Bitmap(AssetLoader.Open(new System.Uri("avares://WinLimit/Assets/offindicator.png")));
@@ -28,10 +29,11 @@ public partial class MainWindowViewModel : ViewModelBase
         _appBlockerService = appBlockerService;
         _localStorageService = localStorageService;
         _apiService = apiService;
+        _authService = new AuthService(_localStorageService, _apiService);
         _homePage = new HomeViewModel();
         _schedulePage = new SchedulePageViewModel(_appBlockerService.scheduleService);
         _blockListPage = new BlockListViewModel(_appBlockerService, _apiService);
-        _loginPage = new LoginPageViewModel(_localStorageService, _apiService);
+        _loginPage = new LoginPageViewModel(_authService,_appBlockerService);
         CurrentPage = _homePage;
         appBlockerService.OnAppBlocked += OnAppBlocked;
         appBlockerService.OnTrackingChanged += OnTrackingChanged;

@@ -1,19 +1,20 @@
 <Window
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="WinLimit.Views.PopUpWindow"
-    Title="App Blocked"
+    x:Class="WinLimit.Views.LogoutPopUpWindow"
+    Title="Log Out"
     WindowStartupLocation="CenterScreen"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:WinLimit.Views"
     xmlns:vm="using:WinLimit.ViewModels"
-    x:DataType="vm:PopUpWindowViewModel"
-    Height="400"
-    Width="500"
+    x:DataType="vm:LogoutPopUpWindowViewModel"
+    Width="450"
+    Height="150"
     Icon="/Assets/avalonia-logo.ico">
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <TextBlock Name="Message" Text="Pop Up Window"/>
-        <Button Command="{Binding StopLoopCommand}" Content="Stop Loop"/>
+        <TextBlock Name="Message" Text="Would you like to keep your blocked apps and schedule rules?"/>
+        <Button Command="{Binding YesCommand}" Content="Yes" HorizontalAlignment="Center"/>
+        <Button Command="{Binding NoCommand}" Content="No" HorizontalAlignment="Center"/>
     </StackPanel>
 </Window>

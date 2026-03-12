@@ -1,8 +1,10 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using WinLimit.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public partial class ScheduleService : ObservableObject
 {
@@ -10,21 +12,28 @@ public partial class ScheduleService : ObservableObject
     public event Action? OnSchedulesChanged;
     private string[] days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
     private LocalStorageService _localStorageService;
-    public ScheduleService(LocalStorageService localStorageService)
+    private APIService _apiService;
+    public ScheduleService(LocalStorageService localStorageService, APIService apiService)
     {
-        WeekDays = new Dictionary<string, WeekDay>();
-        foreach (string day in days)
-        {
-            WeekDays.Add(day,new WeekDay(day));
-        }
-        StartTrackingSchedules();
         _localStorageService=localStorageService;
-        LoadSchedules();
+        _apiService = apiService;
+        CreateNewDict();
+        LoadSchedulesLocal();
+        StartTrackingSchedules();
     }
     public void SchedulesChanged()
     {
         OnSchedulesChanged?.Invoke();
         SaveSchedules();
+    }
+    public void CreateNewDict()
+    {
+        WeekDays = new Dictionary<string, WeekDay>();
+        foreach (string day in days)
+        {
+            WeekDays.Add(day, new WeekDay(day));
+        }
+        OnSchedulesChanged?.Invoke();
     }
     public bool IsScheduledBlocked()
     {
@@ -59,7 +68,7 @@ public partial class ScheduleService : ObservableObject
         }
         SchedulesChanged();
     }
-    // Function to prepare for conversion to JSON to write to file
+    // Function to prepare for conversion to JSON to write to file and cloud 
     public void SaveSchedules()
     {
         Dictionary<string, List<ScheduleRule>> dict = new Dictionary<string, List<ScheduleRule>>();
@@ -67,11 +76,20 @@ public partial class ScheduleService : ObservableObject
         {
             dict[day] = WeekDays[day].ToJSON();
         }
-        _localStorageService.SaveSchedules(dict);
+        JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(dict, jsonOptions);
+        _localStorageService.SaveSchedules(jsonString);
+        _apiService.updateProfileSchedule(jsonString);
     }
-    public void LoadSchedules()
+    // Loads schedules from local file
+    public void LoadSchedulesLocal()
     {
         Dictionary<string, List<ScheduleRule>>? schedules = _localStorageService.LoadSchedules();
+        LoadSchedules(schedules);
+        OnSchedulesChanged?.Invoke();
+    }
+    public void LoadSchedules(Dictionary<string, List<ScheduleRule>>? schedules)
+    {
         if (schedules == null) return;
         foreach (string day in days)
         {

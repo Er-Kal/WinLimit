@@ -14,5 +14,6 @@ public partial class PopUpWindowViewModel : ViewModelBase
     private void StopLoop()
     {
         _appBlockerService.StopLoop();
+        _appBlockerService.ChangeOverrideState();
     }
 }

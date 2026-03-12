@@ -17,7 +17,8 @@ public partial class BlockListViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<BlockItem> _recommendedApps;
     private AppBlockerService _appBlockerService;
-    private BlockItem? SelectedBlockedItem { get; set; }
+    [ObservableProperty]
+    private BlockItem? _selectedBlockedItem;
     [ObservableProperty]
     private string _friendlyCustomName = "";
     [ObservableProperty]

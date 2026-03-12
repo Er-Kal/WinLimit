@@ -9,6 +9,7 @@ using WinLimit.Views;
 using WinLimit.Services;
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Avalonia.Controls;
 
 namespace WinLimit;
 
@@ -47,17 +48,14 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
-            /*desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };*/
-
             var mainViewModel = Services.GetRequiredService<MainWindowViewModel>();
 
             desktop.MainWindow = new MainWindow
             {
                 DataContext = mainViewModel
             };
+
+            desktop.MainWindow.Closing += OnWindowClosing;
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -73,6 +71,35 @@ public partial class App : Application
         foreach (var plugin in dataValidationPluginsToRemove)
         {
             BindingPlugins.DataValidators.Remove(plugin);
+        }
+    }
+
+    private void OnWindowClosing(object? sender, WindowClosingEventArgs e)
+    {
+        e.Cancel = true; // Cancel the closing event to prevent the window from closing immediately
+        if (sender is Window window)
+        {
+            window.Hide(); // Hide the window instead of closing it
+        }
+    }
+
+    private void TrayIcon_Clicked(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var window = desktop.MainWindow;
+            window?.Show();
+            window?.Activate();
+            window.WindowState=WindowState.Normal;
+        }
+    }
+
+    private void OnQuit_Clicked(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow.Closing -= OnWindowClosing;
+            desktop.Shutdown();
         }
     }
 }

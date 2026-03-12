@@ -63,13 +63,25 @@ public class LocalStorageService
             return null;
         }
     }
-
-    public void SaveSchedules(Dictionary<string, List<ScheduleRule>> data)
+    public void DeleteToken()
+    {
+        try
+        {
+            if (File.Exists(_tokenFile))
+            {
+                File.Delete(_tokenFile);
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Theres an error deleting the token");
+        }
+    }
+    public void SaveSchedules(string jsonString)
     {
         try
         {    
-            JsonSerializerOptions jsonOptions = new JsonSerializerOptions {WriteIndented = true};
-            string jsonString = JsonSerializer.Serialize(data, jsonOptions);
+            
             File.WriteAllText(_schedulesFile, jsonString);
         }
         catch
@@ -91,12 +103,10 @@ public class LocalStorageService
         }
     }
 
-    public void SaveBlockedApps(List<BlockItem> data)
+    public void SaveBlockedApps(string jsonString)
     {
         try
         {
-            JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(data, jsonOptions);
             File.WriteAllText(_blockedAppsFile, jsonString);
         }
         catch

@@ -4,29 +4,35 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WinLimit.Models;
+using WinLimit.Views;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace WinLimit.Services;
 
 public class AppBlockerService
 {
     private bool tracking = false;
     private List<BlockItem> blockedApps;
+    private readonly APIService _apiService;
     public event Action<string>? OnAppBlocked;
     public event Action<bool>? OnTrackingChanged;
     public event Action? OnBlockedAppsChanged;
     public IReadOnlyList<BlockItem> BlockedApps => blockedApps.AsReadOnly();
     public ScheduleService scheduleService;
     public LocalStorageService _localStorageService;
+    private bool blockingOverride = false;
     // Constructor
-    public AppBlockerService(LocalStorageService localStorageService)
+    public AppBlockerService(LocalStorageService localStorageService, APIService apiService)
     {
-        scheduleService = new ScheduleService(localStorageService);
+        scheduleService = new ScheduleService(localStorageService, apiService);
+        _apiService = apiService;
         blockedApps = new List<BlockItem>();
         scheduleService.OnSchedulesChanged += OnSchedulesChanged;
         StartLoop();
         _localStorageService = localStorageService;
-        this.LoadBlockedApps();
+        this.LoadBlockedAppsLocal();
     }
 
     private void OnSchedulesChanged()
@@ -69,12 +75,14 @@ public class AppBlockerService
         foreach (Process process in processes)
         {
             string processName = process.ProcessName.ToLower();
-            if (blockedApps.Any(b => b.ExecutableName?.ToLower() == processName))
+            var blockedApp = blockedApps.FirstOrDefault(b => b.ExecutableName?.ToLower() == processName);
+            if (blockedApp != null)
             {
                 try
                 {
                     process.Kill();
                     AppBlocked();
+                    _apiService.LogAppBlocked(blockedApp.ExecutableName, blockedApp.FriendlyName);
                 }
                 catch (Exception e)
                 {
@@ -91,7 +99,7 @@ public class AppBlockerService
         TrackingChanged();
         while (tracking)
         {
-            if (!scheduleService.IsScheduledBlocked())
+            if (!scheduleService.IsScheduledBlocked() || blockingOverride)
             {
                 StopLoop();
                 break;
@@ -124,13 +132,44 @@ public class AppBlockerService
 
     public void SaveBlockedApps()
     {
-        _localStorageService.SaveBlockedApps(blockedApps);
+        JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(blockedApps, jsonOptions);
+        _localStorageService.SaveBlockedApps(jsonString);
+        _apiService.updateProfileBlockItems(jsonString);
     }
-
-    public void LoadBlockedApps()
+    public void LoadBlockedAppsLocal()
     {
         List<BlockItem>? data = _localStorageService.LoadBlockedApps();
+        LoadBlockedApps(data);
+    }
+    public void LoadBlockedApps(List<BlockItem>? data)
+    {
         if (data == null) return;
         blockedApps = data;
+        BlockedAppsChanged();
+    }
+    public void ClearRules()
+    {
+        blockedApps.Clear();
+        BlockedAppsChanged();
+        scheduleService.CreateNewDict();
+    }
+    public async Task LoadUserProfile()
+    {
+        string? data = await _apiService.GetUserProfile();
+        if (data == null) return;
+
+
+        System.Diagnostics.Debug.WriteLine(data);
+        UserProfile? userProfile = JsonSerializer.Deserialize<UserProfile>(data);
+        if (userProfile == null) return;
+
+        LoadBlockedApps(JsonSerializer.Deserialize<List<BlockItem>>(userProfile.BlockedAppsSettings));
+        scheduleService.LoadSchedules(JsonSerializer.Deserialize<Dictionary<string, List<ScheduleRule>>?>(userProfile.ScheduleSettings));
+    }
+
+    public void ChangeOverrideState()
+    {
+        blockingOverride = !blockingOverride;
     }
 }
