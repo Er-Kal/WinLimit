@@ -12,10 +12,11 @@
             <TextBlock FontSize="16" Text="Username"/>
             <TextBox Watermark="Enter Your Username" Text="{Binding Username}" Width="250"/>
             <TextBlock FontSize="16" Text="Password"/>
-            <TextBox Watermark="Enter Your Password" Text="{Binding Password}"/>
+            <TextBox Watermark="Enter Your Password" Text="{Binding Password}" PasswordChar="*"/>
             <TextBlock FontSize="16" Text="{Binding LoginPageErrorMessage}"/>
             <Button Margin="4,0,4,0" Content="Login" Command="{Binding LoginCommand}" HorizontalAlignment="Center"/>
             <Button Content="Register" Command="{Binding RegisterCommand}" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding PasswordCheck}"/>
         </StackPanel>
         <StackPanel IsVisible="{Binding IsLoggedIn}">
             <TextBlock FontSize="16" Text="You are logged in!"/>

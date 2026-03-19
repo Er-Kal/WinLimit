@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WinLimit.Services;
@@ -23,6 +25,8 @@ public partial class LoginPageViewModel : ViewModelBase
     private bool _isLoggedIn = false;
     [ObservableProperty]
     private bool _isLoggedOut = true;
+    [ObservableProperty]
+    private string _passwordCheck = "";
     public LoginPageViewModel(AuthService authService, AppBlockerService appBlockerService)
     {
         _authService = authService;
@@ -100,5 +104,26 @@ public partial class LoginPageViewModel : ViewModelBase
         {
             _appBlockerService.ChangeOverrideState();
         }
+    }
+    partial void OnPasswordChanged(string value)
+    {
+        string output = "";
+        if (Password.Length < 8)
+        {
+            output = "Password must be at least 8 characters long.";
+        }
+        if (!Password.Any(char.IsUpper))
+        {
+            output += " Password must contain at least one uppercase letter." + Environment.NewLine;
+        }
+        if (!Password.Any(char.IsNumber))
+        {
+            output+="Password must contain at least one number." + Environment.NewLine;
+        }
+        if (!Password.Any(c => !char.IsLetterOrDigit(c)))
+        {
+            output += "Password must contain at least one special character." + Environment.NewLine;
+        }
+        PasswordCheck = output;
     }
 }
