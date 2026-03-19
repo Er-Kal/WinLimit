@@ -1,9 +1,9 @@
 
-using Avalonia.Metadata;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using WinLimit.Models;
 using WinLimit.Services;
@@ -49,13 +49,14 @@ public partial class BlockListViewModel : ViewModelBase
 
     private async Task Initialize()
     {
-        var items = await _apiService.GetLatestBlockRecommendations();
+        List<BlockItem> items = await _apiService.GetLatestBlockRecommendations();
         if (items == null) return;
         if (items.Count > 0)
         {
             foreach (var item in items)
             {
-                RecommendedApps.Add(item);
+                if (!BlockedItems.Any(block => block.ExecutableName==item.ExecutableName))
+                    RecommendedApps.Add(item);
             }
         }
     }
