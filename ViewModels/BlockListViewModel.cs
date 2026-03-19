@@ -26,6 +26,7 @@ public partial class BlockListViewModel : ViewModelBase
     [ObservableProperty]
     private string _customDescription = "";
     private APIService _apiService;
+    private string[] safeApps = ["explorer", "svchost", "lsass", "csrss", "winlogon", "dwm", "taskmgr", "services", "smss", "wininit","winlimit","msmpeng","securityhealthsystray","windefend","wuauclt","usoclient","ctfmon","fontdrvhost","nvcontainer","amdow","system","magnify","narrator","osk"];
     public BlockListViewModel(AppBlockerService appBlockerService, APIService apiService)
     {
         // Initialize collections immediately to avoid NullReferenceExceptions in the View
@@ -85,6 +86,11 @@ public partial class BlockListViewModel : ViewModelBase
         else
         {
             app = new BlockItem(ExecutableCustomName,CustomDescription);
+        }
+
+        if (safeApps.Any(name => name == app.ExecutableName))
+        {
+            return;
         }
         _appBlockerService.AddApp(app);
     }

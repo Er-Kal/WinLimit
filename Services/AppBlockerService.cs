@@ -164,8 +164,14 @@ public class AppBlockerService
         UserProfile? userProfile = JsonSerializer.Deserialize<UserProfile>(data);
         if (userProfile == null) return;
 
-        LoadBlockedApps(JsonSerializer.Deserialize<List<BlockItem>>(userProfile.BlockedAppsSettings));
-        scheduleService.LoadSchedules(JsonSerializer.Deserialize<Dictionary<string, List<ScheduleRule>>?>(userProfile.ScheduleSettings));
+        if (!string.IsNullOrWhiteSpace(userProfile.BlockedAppsSettings))
+        {
+            LoadBlockedApps(JsonSerializer.Deserialize<List<BlockItem>>(userProfile.BlockedAppsSettings));
+        }
+        if (!string.IsNullOrWhiteSpace(userProfile.ScheduleSettings))
+        {
+            scheduleService.LoadSchedules(JsonSerializer.Deserialize<Dictionary<string, List<ScheduleRule>>?>(userProfile.ScheduleSettings));
+        }
     }
 
     public void ChangeOverrideState()

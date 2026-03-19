@@ -70,8 +70,18 @@ public partial class LoginPageViewModel : ViewModelBase
             string? response = await _authService.LoginAsync(Username, Password);
             if (response != null)
             {
-                await _appBlockerService.LoadUserProfile();
-                await LoadUser();
+                try
+                {
+                    await _appBlockerService.LoadUserProfile();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading user profile: {ex.Message}");
+                }
+                finally
+                {
+                    await LoadUser();
+                }
                 return;
             }
             LoginPageErrorMessage = "There was a problem";
