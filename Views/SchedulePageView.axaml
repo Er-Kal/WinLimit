@@ -43,9 +43,16 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button VerticalAlignment="Stretch" Content="{Binding StartHour, StringFormat='{}{0}:00'}"
+                                    <Button VerticalAlignment="Stretch"
                                             Command="{Binding #SchedulePage.DataContext.RemoveScheduleRuleCommand}"
-                                            CommandParameter="{Binding}" />
+                                            CommandParameter="{Binding}">
+                                        <Grid>
+											<TextBlock Text="{Binding StartHour, StringFormat='{}{0}:00'}"
+                                                       VerticalAlignment="Top"/>
+											<TextBlock Text="{Binding EndHour, StringFormat='{}{0}:00'}"
+                                                       VerticalAlignment="Bottom"/>
+                                        </Grid>
+                                        </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
