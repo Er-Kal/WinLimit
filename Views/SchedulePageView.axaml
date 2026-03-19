@@ -1,15 +1,16 @@
 <UserControl
-x:Class="WinLimit.Views.SchedulePageView"
-xmlns="https://github.com/avaloniaui"
-xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-xmlns:vm="using:WinLimit.ViewModels"
-xmlns:m="using:WinLimit.Models"
-x:DataType="vm:SchedulePageViewModel"
-VerticalAlignment="Stretch"
-VerticalContentAlignment="Stretch"
-x:Name="SchedulePage">
+    x:Class="WinLimit.Views.SchedulePageView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:WinLimit.ViewModels"
+    xmlns:m="using:WinLimit.Models"
+    xmlns:views="using:WinLimit.Views"
+    x:DataType="vm:SchedulePageViewModel"
+    VerticalAlignment="Stretch"
+    VerticalContentAlignment="Stretch"
+    x:Name="SchedulePage">
     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -30,29 +31,23 @@ x:Name="SchedulePage">
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" FontSize="24" Text="{Binding Key}"/>
                         <ItemsControl
-                        Grid.Row="1"
-                        Padding="4"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch"
-                        ItemsSource="{Binding Value.ScheduleRules}">
+                            Grid.Row="1"
+                            Padding="4"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{Binding Value.ScheduleRules}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <Canvas ClipToBounds="True"/>
+                                    <views:SchedulePanel ClipToBounds="True"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Button VerticalAlignment="Stretch" Content="{Binding StartHour, StringFormat='{}{0}:00'}"
                                             Command="{Binding #SchedulePage.DataContext.RemoveScheduleRuleCommand}"
-                                            CommandParameter= "{Binding}" />
+                                            CommandParameter="{Binding}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                            <ItemsControl.Styles>
-                                <Style Selector="ContentPresenter" x:DataType="m:ScheduleRule">
-                                    <Setter Property="Canvas.Top" Value="{Binding CanvasTop}"/>
-                                    <Setter Property="Height" Value="{Binding CanvasHeight}"/>
-                                </Style>
-                            </ItemsControl.Styles>
                         </ItemsControl>
                     </Grid>
                 </DataTemplate>

@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using WinLimit.Models;
-
+namespace WinLimit.Views;
 public class SchedulePanel : Panel
 {
     protected override Size ArrangeOverride(Size finalSize)
