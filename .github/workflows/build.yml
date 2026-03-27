@@ -1,0 +1,32 @@
+name: Build and Sign WinLimit
+
+on:
+  push:
+    tags:
+      - 'v*' # Runs when you create a version tag like v1.0
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Publish WinLimit
+      run: dotnet publish WinLimit.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:PublishReadyToRun=true -o ./publish
+
+    # --- SIGNPATH STEP GOES HERE ---
+    # Once you get your SignPath API key, you will drop their 
+    # "SignPath/github-action-submit-signing-request" action here.
+    
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: WinLimit-Windows-x64
+        path: ./publish/WinLimit.exe
