@@ -9,8 +9,8 @@
     <StackPanel HorizontalAlignment="Center">
         <TextBlock FontSize="24" Text="Account Page" />
         <StackPanel IsVisible="{Binding IsLoggedOut}">
-            <TextBlock FontSize="16" Text="Username"/>
-            <TextBox Watermark="Enter Your Username" Text="{Binding Username}" Width="250"/>
+            <TextBlock FontSize="16" Text="Email"/>
+            <TextBox Watermark="Enter Your Email" Text="{Binding Username}" Width="250"/>
             <TextBlock FontSize="16" Text="Password"/>
             <TextBox Watermark="Enter Your Password" Text="{Binding Password}" PasswordChar="*"/>
             <TextBlock FontSize="16" Text="{Binding LoginPageErrorMessage}"/>
