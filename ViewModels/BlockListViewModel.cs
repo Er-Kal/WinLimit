@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WinLimit.Models;
@@ -79,13 +80,15 @@ public partial class BlockListViewModel : ViewModelBase
     private void AddCustomApp()
     {
         BlockItem app;
+
+        string execName = Path.GetFileNameWithoutExtension(ExecutableCustomName);
         if (FriendlyCustomName.Length > 0)
         {
-            app = new BlockItem(FriendlyCustomName,ExecutableCustomName,CustomDescription);
+            app = new BlockItem(FriendlyCustomName,execName,CustomDescription);
         }
         else
         {
-            app = new BlockItem(ExecutableCustomName,CustomDescription);
+            app = new BlockItem(execName,CustomDescription);
         }
 
         if (safeApps.Any(name => name.ToLower() == app.ExecutableName!.ToLower()))
