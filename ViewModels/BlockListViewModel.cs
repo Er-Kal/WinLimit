@@ -88,7 +88,7 @@ public partial class BlockListViewModel : ViewModelBase
             app = new BlockItem(ExecutableCustomName,CustomDescription);
         }
 
-        if (safeApps.Any(name => name == app.ExecutableName))
+        if (safeApps.Any(name => name.ToLower() == app.ExecutableName!.ToLower()))
         {
             return;
         }
