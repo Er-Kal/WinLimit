@@ -6,15 +6,13 @@
 ## Overview
 WinLimit is a Windows-native app that helps you control screen time by blocking distracting applications based on custom schedules. The app is built for individuals seeking to manage their screen time, such as students, professionals, or parents monitoring usage.
 
-## Features
-- **Application Blocking**: Automatically terminates specified applications when launched during scheduled blocked periods using process monitoring.
-- **Weekly Scheduling**: Create and manage time-based rules for each day of the week, with flexible start and end hours.
-- **User Authentication**: Secure login and registration with token-based authentication.
-- **Cross-Device Synchronization**: Sync blocklists and schedules across Windows devices via a Supabase backend API.
-- **Override Mechanism**: Users can manually override blocks through a popup window for temporary access.
-- **Local Storage**: Offline functionality with local persistence of settings and schedules.
+## What it does
+- **Block apps**: Select blocks you want to app, and it'll close them as they launch
+- **Scheduling**: Select when you want apps to be blocked based on a weekly schedule
+- **Accounts**: Create an account so you can keep your settings across multiple devices
+- **Friction-Layer**: In the case you want to want to disable the block, theres a "mini-game"esque pop-up that can grant temporary access
+- **Offline Functionality**: Works fully offline
 - **Activity Logging**: Records blocked app attempts for review (configuration and schedules only, no personal activity data).
-- **Single Instance Enforcement**: Ensures only one instance of the app runs at a time.
 
 ## Installation
 ### Prerequisites
@@ -22,14 +20,14 @@ WinLimit is a Windows-native app that helps you control screen time by blocking 
 - .NET 9.0 Runtime (automatically included in self-contained builds)
 
 ### Option 1: Download Pre-built Release
-1. Visit the [Releases](https://github.com/yourusername/WinLimit/releases) page.
+1. Visit the [Releases](https://github.com/er-kal/WinLimit/releases) page.
 2. Download the latest `WinLimit.exe`.
 3. Run the executable directly - no installation required.
 
 ### Option 2: Build from Source
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/WinLimit.git
+   git clone https://github.com/er-kal/WinLimit.git
    cd WinLimit
    ```
 2. Restore dependencies:
@@ -59,22 +57,7 @@ Example Workflow:
 - **Schedules**: Configured via the Schedule page UI, stored locally and synced to cloud.
 - **Blocklist**: Managed through the Block List page, supports custom app names and descriptions.
 - **Authentication**: Tokens stored securely using Windows Data Protection API.
-- **Environment Variables**: Uses `.env` file for API configuration (Supabase URL and keys).
-
-## Architecture
-WinLimit follows the MVVM (Model-View-ViewModel) pattern using Avalonia for UI. Key components include:
-
-- **Models**: Data structures for users, schedules, block items, and API responses.
-- **Views**: Avalonia XAML-based UI components (MainWindow, LoginPage, SchedulePage, etc.).
-- **ViewModels**: Business logic and data binding for each view.
-- **Services**:
-  - `AppBlockerService`: Core blocking logic with process monitoring and termination.
-  - `ScheduleService`: Manages weekly schedules and active state checking.
-  - `APIService`: Handles Supabase backend communication for sync and logging.
-  - `AuthService`: Manages user authentication and token handling.
-  - `LocalStorageService`: Provides local file-based persistence.
-
-The app uses dependency injection for service management and runs a lightweight background loop to enforce active restrictions.
+- **Self-Hosting**: Change the API URL if you'd prefer to self-host.
 
 ## Technologies Used
 - **Language**: C# (.NET 9.0)
@@ -85,14 +68,6 @@ The app uses dependency injection for service management and runs a lightweight 
 - **UI Components**: RangeSlider.Avalonia 2.1.0
 - **Security**: System.Security.Cryptography.ProtectedData 10.0.1
 - **Configuration**: dotenv.net 4.0.0
-
-## Contributing
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/your-feature`.
-3. Make changes and ensure tests pass.
-4. Submit a pull request with a clear description of changes.
-
-Please follow C# coding standards and include appropriate comments. For major changes, open an issue first to discuss.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
