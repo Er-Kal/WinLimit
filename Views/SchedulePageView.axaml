@@ -48,7 +48,7 @@
                         <TextBlock Grid.Row="0" FontSize="24" Text="{Binding Key}"/>
                         <ItemsControl
                             Grid.Row="1"
-                            Padding="4"
+                            Padding="0"
                             VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch"
                             ItemsSource="{Binding Value.ScheduleRules}">
@@ -59,7 +59,10 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button VerticalAlignment="Stretch"
+                                    <Grid>
+                                     <Button HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
                                             Command="{Binding #SchedulePage.DataContext.RemoveScheduleRuleCommand}"
                                             CommandParameter="{Binding}">
                                         <Grid>
@@ -69,6 +72,17 @@
                                                        VerticalAlignment="Bottom"/>
                                         </Grid>
                                         </Button>
+                                    <Border Tag="Top" Height="8" VerticalAlignment="Top"
+                                            Background="#40808080" Cursor="SizeNorthSouth"
+                                            PointerPressed="Handle_PointerPressed"
+                                            PointerMoved="Handle_PointerMoved"
+                                            PointerReleased="Handle_PointerReleased"/>
+                                    <Border Tag="Bottom" Height="8" VerticalAlignment="Bottom"
+                                            Background="#40808080" Cursor="SizeNorthSouth"
+                                            PointerPressed="Handle_PointerPressed"
+                                            PointerMoved="Handle_PointerMoved"
+                                            PointerReleased="Handle_PointerReleased"/>
+                                    </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

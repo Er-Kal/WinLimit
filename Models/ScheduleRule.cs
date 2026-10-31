@@ -1,13 +1,22 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace WinLimit.Models;
-public class ScheduleRule
+
+public partial class ScheduleRule : ObservableObject
 {
-    public int StartHour { get; set; }
-    public int EndHour { get; set; }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Duration))]
+    private int _startHour;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Duration))]
+    private int _endHour;
+
     public int Duration => EndHour - StartHour;
 
     public ScheduleRule(int startHour, int endHour)
     {
-        StartHour = startHour;
-        EndHour = endHour;
+        _startHour = startHour;
+        _endHour = endHour;
     }
 }

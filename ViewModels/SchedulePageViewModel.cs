@@ -66,6 +66,12 @@ public partial class SchedulePageViewModel : ViewModelBase
         window.Show();
     }
 
+    // Called after a rule has been resized by dragging; persists the change
+    public void RuleResized()
+    {
+        _scheduleService.SchedulesChanged();
+    }
+
     private void OpenNewConfigWindow()
     {
         var window = new NewScheduleConfigWindow();
