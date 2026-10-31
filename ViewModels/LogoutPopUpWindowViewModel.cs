@@ -22,7 +22,6 @@ public partial class LogoutPopUpWindowViewModel : ViewModelBase
     private void No()
     {
         _appBlockerService.ClearRules();
-        _appBlockerService.scheduleService.CreateNewDict();
         _window.Close();
     }
 }

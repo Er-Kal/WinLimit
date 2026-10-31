@@ -1,0 +1,78 @@
+<Window
+    x:Class="WinLimit.Views.EditScheduleConfigWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:WinLimit.ViewModels"
+    Title="Edit Config"
+    Width="320"
+    Height="240"
+    x:DataType="vm:EditScheduleConfigWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    WindowStartupLocation="CenterScreen">
+    <StackPanel
+        Width="240"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Spacing="8">
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="20"
+            Text="Edit config" />
+        <TextBlock
+            HorizontalAlignment="Center"
+            Text="{Binding ConfigName}" />
+
+        <!-- Step 1: choose action -->
+        <StackPanel IsVisible="{Binding IsChoosing}" Spacing="8">
+            <TextBlock HorizontalAlignment="Center" Text="What would you like to do?" />
+            <Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Command="{Binding ChooseRenameCommand}"
+                Content="Change display name" />
+            <Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Command="{Binding ChooseDeleteCommand}"
+                Content="Delete config" />
+            <Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Command="{Binding CancelCommand}"
+                Content="Cancel" />
+        </StackPanel>
+
+        <!-- Step 2a: rename -->
+        <StackPanel IsVisible="{Binding IsRenaming}" Spacing="8">
+            <TextBlock Text="New display name" />
+            <TextBox Text="{Binding DisplayName}" />
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="8">
+                <Button Command="{Binding SubmitRenameCommand}" Content="Submit" IsDefault="True" />
+                <Button Command="{Binding BackCommand}" Content="Back" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Step 2b: confirm delete -->
+        <StackPanel IsVisible="{Binding IsDeleting}" Spacing="8">
+            <TextBlock
+                HorizontalAlignment="Center"
+                Text="Delete this config and all its rules?"
+                TextWrapping="Wrap" />
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="8">
+                <Button Command="{Binding ConfirmDeleteCommand}" Content="Delete" />
+                <Button Command="{Binding BackCommand}" Content="Back" />
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock
+            HorizontalAlignment="Center"
+            Foreground="Red"
+            Text="{Binding ErrorMessage}" />
+    </StackPanel>
+</Window>

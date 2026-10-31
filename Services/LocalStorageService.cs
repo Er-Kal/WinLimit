@@ -90,12 +90,12 @@ public class LocalStorageService
         }
     }
 
-    public Dictionary<string, List<ScheduleRule>>? LoadSchedules()
+    public ScheduleConfig? LoadSchedules()
     {
         try
         {
             string data = File.ReadAllText(_schedulesFile);
-            return JsonSerializer.Deserialize<Dictionary<string,List<ScheduleRule>>>(data);
+            return JsonSerializer.Deserialize<ScheduleConfig>(data);
         }
         catch (FileNotFoundException) // No file
         {

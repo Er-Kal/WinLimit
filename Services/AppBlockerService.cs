@@ -155,7 +155,6 @@ public class AppBlockerService
     {
         blockedApps.Clear();
         BlockedAppsChanged();
-        scheduleService.CreateNewDict();
     }
     public async Task LoadUserProfile()
     {
@@ -170,7 +169,7 @@ public class AppBlockerService
         }
         if (!string.IsNullOrWhiteSpace(userProfile.ScheduleSettings))
         {
-            scheduleService.LoadSchedules(JsonSerializer.Deserialize<Dictionary<string, List<ScheduleRule>>?>(userProfile.ScheduleSettings));
+            scheduleService.LoadSchedules(JsonSerializer.Deserialize<ScheduleConfig?>(userProfile.ScheduleSettings));
         }
     }
 

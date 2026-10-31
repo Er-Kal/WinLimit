@@ -8,16 +8,16 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public partial class ScheduleService : ObservableObject
 {
-    public Dictionary<string,WeekDay> WeekDays;
+    public ScheduleConfig ScheduleConfig { get; set; }
+    public Dictionary<string,WeekDay> WeekDays = new Dictionary<string, WeekDay>();
     public event Action? OnSchedulesChanged;
-    private string[] days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+    private string[] days = new string[] {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
     private LocalStorageService _localStorageService;
     private APIService _apiService;
     public ScheduleService(LocalStorageService localStorageService, APIService apiService)
     {
         _localStorageService=localStorageService;
         _apiService = apiService;
-        CreateNewDict();
         LoadSchedulesLocal();
         StartTrackingSchedules();
     }
@@ -26,18 +26,10 @@ public partial class ScheduleService : ObservableObject
         OnSchedulesChanged?.Invoke();
         SaveSchedules();
     }
-    public void CreateNewDict()
-    {
-        WeekDays = new Dictionary<string, WeekDay>();
-        foreach (string day in days)
-        {
-            WeekDays.Add(day, new WeekDay(day));
-        }
-        OnSchedulesChanged?.Invoke();
-    }
     public bool IsScheduledBlocked()
     {
-        WeekDay currentDay = WeekDays[DateTime.Now.DayOfWeek.ToString()];
+        string dayOfWeek = DateTime.Now.DayOfWeek.ToString();
+        WeekDay currentDay = WeekDays[dayOfWeek];
         int currentHour = DateTime.Now.Hour;
         foreach (ScheduleRule rule in currentDay.ScheduleRules)
         {
@@ -71,35 +63,108 @@ public partial class ScheduleService : ObservableObject
     // Function to prepare for conversion to JSON to write to file and cloud 
     public void SaveSchedules()
     {
-        Dictionary<string, List<ScheduleRule>> dict = new Dictionary<string, List<ScheduleRule>>();
-        foreach (string day in days)
+        /*foreach (string day in days)
         {
             dict[day] = WeekDays[day].ToJSON();
-        }
+        }*/
+
         JsonSerializerOptions jsonOptions = new JsonSerializerOptions { WriteIndented = true };
-        string jsonString = JsonSerializer.Serialize(dict, jsonOptions);
+        string jsonString = JsonSerializer.Serialize(ScheduleConfig, jsonOptions);
         _localStorageService.SaveSchedules(jsonString);
         _apiService.updateProfileSchedule(jsonString);
     }
     // Loads schedules from local file
     public void LoadSchedulesLocal()
     {
-        Dictionary<string, List<ScheduleRule>>? schedules = _localStorageService.LoadSchedules();
+        ScheduleConfig schedules = _localStorageService.LoadSchedules();
         LoadSchedules(schedules);
         OnSchedulesChanged?.Invoke();
     }
-    public void LoadSchedules(Dictionary<string, List<ScheduleRule>>? schedules)
+    public void LoadSchedules(ScheduleConfig schedules)
     {
-        if (schedules == null) return;
-        foreach (string day in days)
+        if (schedules == null)
         {
-            WeekDays[day].ScheduleRules.Clear();
-            List<ScheduleRule> rules = schedules[day];
-            foreach (ScheduleRule rule in rules)
+            ScheduleConfig = new ScheduleConfig(new Dictionary<Guid, ScheduleDefinition>());
+            WeekDay[] days = new WeekDay[7];
+            for (int i = 0; i<7; i++)
             {
-                WeekDays[day].AddRule(rule.StartHour, rule.EndHour);
+                days[i] = new WeekDay(((DayOfWeek)i).ToString());
+            }
+            ScheduleDefinition defaultDefinition = new ScheduleDefinition("Default", days);
+            Guid defGuid = Guid.NewGuid();
+            ScheduleConfig.Configs.Add(defGuid, defaultDefinition);
+            ScheduleConfig.CurrentConfig = defGuid;
+        }
+        else
+        {
+            ScheduleConfig = schedules;
+        }
+        RebuildWeekDays();
+        SaveSchedules();
+    }
+    // Rebuilds the WeekDays lookup from the currently selected config
+    private void RebuildWeekDays()
+    {
+        var newWeekDays = new Dictionary<string, WeekDay>();
+        foreach (WeekDay day in ScheduleConfig.Configs[ScheduleConfig.CurrentConfig].WeekDays)
+        {
+            newWeekDays[day.WeekDayName] = day;
+        }
+        WeekDays = newWeekDays;
+    }
+    public bool ConfigNameExists(string name, Guid? excludeId = null)
+    {
+        foreach (var entry in ScheduleConfig.Configs)
+        {
+            if (entry.Key == excludeId) continue;
+            if (string.Equals(entry.Value.Name, name, StringComparison.OrdinalIgnoreCase)) return true;
+        }
+        return false;
+    }
+    // Adds a new empty schedule config with the given display name, makes it active and saves
+    public Guid AddConfig(string name)
+    {
+        WeekDay[] newDays = new WeekDay[7];
+        for (int i = 0; i < 7; i++)
+        {
+            newDays[i] = new WeekDay(((DayOfWeek)i).ToString());
+        }
+        Guid id = Guid.NewGuid();
+        ScheduleConfig.Configs.Add(id, new ScheduleDefinition(name, newDays));
+        ScheduleConfig.CurrentConfig = id;
+        RebuildWeekDays();
+        SchedulesChanged();
+        return id;
+    }
+    public void RenameConfig(Guid id, string newName)
+    {
+        if (!ScheduleConfig.Configs.TryGetValue(id, out var definition)) return;
+        definition.Name = newName;
+        SchedulesChanged();
+    }
+    // Deletes a config (the last remaining one can't be deleted); switches to another if it was active
+    public bool DeleteConfig(Guid id)
+    {
+        if (ScheduleConfig.Configs.Count <= 1 || !ScheduleConfig.Configs.ContainsKey(id)) return false;
+        ScheduleConfig.Configs.Remove(id);
+        if (ScheduleConfig.CurrentConfig == id)
+        {
+            foreach (Guid remaining in ScheduleConfig.Configs.Keys)
+            {
+                ScheduleConfig.CurrentConfig = remaining;
+                break;
             }
         }
-        SaveSchedules();
+        RebuildWeekDays();
+        SchedulesChanged();
+        return true;
+    }
+    // Switches the active schedule config and notifies listeners
+    public void SwitchConfig(Guid id)
+    {
+        if (ScheduleConfig.CurrentConfig == id || !ScheduleConfig.Configs.ContainsKey(id)) return;
+        ScheduleConfig.CurrentConfig = id;
+        RebuildWeekDays();
+        SchedulesChanged();
     }
 }

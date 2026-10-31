@@ -1,0 +1,30 @@
+<Window
+    x:Class="WinLimit.Views.NewScheduleConfigWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:WinLimit.ViewModels"
+    Title="New Schedule"
+    Width="300"
+    Height="200"
+    x:DataType="vm:NewScheduleConfigWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    WindowStartupLocation="CenterScreen">
+    <StackPanel
+        Width="220"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Spacing="8">
+        <TextBlock
+            HorizontalAlignment="Center"
+            FontSize="20"
+            Text="New schedule" />
+        <TextBlock Text="Display name" />
+        <TextBox Text="{Binding DisplayName}" Watermark="e.g. Weekdays" />
+        <TextBlock Foreground="Red" Text="{Binding ErrorMessage}" />
+        <Button
+            HorizontalAlignment="Center"
+            Command="{Binding SubmitCommand}"
+            Content="Submit"
+            IsDefault="True" />
+    </StackPanel>
+</Window>

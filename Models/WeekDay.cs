@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Tmds.DBus.Protocol;
 namespace WinLimit.Models;
 
@@ -8,6 +9,7 @@ public class WeekDay
 {
     public string WeekDayName{get;set;}
     public ObservableCollection<ScheduleRule> ScheduleRules{get;set;}
+    [JsonConstructor]
     public WeekDay(string weekDayName, ObservableCollection<ScheduleRule> scheduleRules)
     {
         ScheduleRules = scheduleRules;
