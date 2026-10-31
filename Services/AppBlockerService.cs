@@ -77,19 +77,22 @@ public class AppBlockerService
 
         foreach (Process process in processes)
         {
-            string processName = process.ProcessName.ToLower();
-            var blockedApp = blockedApps.FirstOrDefault(b => b.ExecutableName?.ToLower() == processName);
-            if (blockedApp != null)
+            using (process)
             {
-                try
+                string processName = process.ProcessName.ToLower();
+                var blockedApp = blockedApps.FirstOrDefault(b => b.ExecutableName?.ToLower() == processName);
+                if (blockedApp != null)
                 {
-                    process.Kill();
-                    AppBlocked();
-                    _apiService.LogAppBlocked(blockedApp.ExecutableName, blockedApp.FriendlyName);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
+                    try
+                    {
+                        process.Kill();
+                        AppBlocked();
+                        _apiService.LogAppBlocked(blockedApp.ExecutableName, blockedApp.FriendlyName);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
             }
         }
@@ -98,6 +101,7 @@ public class AppBlockerService
     // Calls TrackingChanged function
     public async void StartLoop()
     {
+        if (tracking) return;
         tracking = true;
         TrackingChanged();
         while (tracking)

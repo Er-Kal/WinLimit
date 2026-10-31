@@ -33,7 +33,7 @@ public partial class ScheduleService : ObservableObject
         int currentHour = DateTime.Now.Hour;
         foreach (ScheduleRule rule in currentDay.ScheduleRules)
         {
-            if (rule.StartHour <= currentHour && currentHour <= rule.EndHour)
+            if (rule.StartHour <= currentHour && currentHour < rule.EndHour)
                 return true;
         }
         return false;
